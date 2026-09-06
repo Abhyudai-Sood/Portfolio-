@@ -1,77 +1,89 @@
 import React from 'react';
 import { SKILL_CATEGORIES } from '@/data/portfolioData';
 import { SpotlightCard } from '@/components/react-bits/SpotlightCard';
-import { Code2, Terminal, Globe, Wrench, Sparkles } from 'lucide-react';
+import { Code, Layers, Sparkles, Brain, CheckCircle2 } from 'lucide-react';
 
 export const SkillsMatrix: React.FC = () => {
-  const getCategoryIcon = (index: number) => {
-    switch (index) {
-      case 0:
-        return <Code2 className="w-4 h-4 text-cyan-400" />;
-      case 1:
-        return <Terminal className="w-4 h-4 text-amber-400" />;
-      case 2:
-        return <Globe className="w-4 h-4 text-emerald-400" />;
-      default:
-        return <Wrench className="w-4 h-4 text-violet-400" />;
-    }
-  };
-
   return (
     <section id="skills" className="py-20 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-mono mb-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-mono mb-3">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>TECHNICAL CAPABILITIES</span>
+            <span>TECHNICAL &amp; PROFESSIONAL CAPABILITIES</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Tools &amp; Technologies
+            Skills
           </h2>
           <p className="text-slate-400 text-sm mt-2">
-            Backed by real project implementations, hardware prototypes, and capstone documentation.
+            Programming languages, algorithmic libraries, engineering tools, and professional soft skills.
           </p>
         </div>
 
+        {/* Symmetric 4-Card Skills Grid (2x2 on desktop for perfect balance) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {SKILL_CATEGORIES.map((cat, idx) => (
+          {SKILL_CATEGORIES.map((category, idx) => (
             <SpotlightCard
-              key={cat.title}
-              className="h-full"
+              key={idx}
               spotlightColor="rgba(6, 182, 212, 0.12)"
+              className="p-6 sm:p-8 flex flex-col justify-between border-white/[0.08] bg-[#0c1019]/90"
             >
-              <div className="flex items-center gap-2.5 border-b border-white/[0.08] pb-3 mb-5">
-                <span className="p-2 rounded-xl bg-white/[0.04] border border-white/[0.08]">
-                  {getCategoryIcon(idx)}
-                </span>
-                <h3 className="text-lg font-bold text-white">{cat.title}</h3>
+              <div>
+                <div className="flex items-center justify-between border-b border-white/[0.08] pb-3 mb-5">
+                  <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                    <span>{category.title}</span>
+                  </h3>
+                  <span className="text-[11px] font-mono text-slate-400">
+                    {category.skills.length} Competencies
+                  </span>
+                </div>
+
+                <div className="space-y-4">
+                  {category.skills.map((skill, sIdx) => (
+                    <div key={sIdx} className="space-y-1.5">
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="w-2 h-2 rounded-full shrink-0"
+                            style={{ backgroundColor: skill.brandColor }}
+                          />
+                          <span className="font-semibold text-slate-100">
+                            {skill.name}
+                          </span>
+                        </div>
+                        <span className="font-mono text-[11px] text-slate-400">
+                          {skill.proof}
+                        </span>
+                      </div>
+
+                      {/* Progress bar */}
+                      <div className="w-full h-1.5 rounded-full bg-white/[0.05] overflow-hidden">
+                        <div
+                          className="h-full rounded-full transition-all duration-500"
+                          style={{
+                            width: `${skill.level}%`,
+                            backgroundColor: skill.brandColor,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="space-y-3">
-                {cat.skills.map((skill) => (
-                  <div
-                    key={skill.name}
-                    className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:border-white/[0.12] transition-colors"
-                  >
-                    <div className="flex items-center gap-2 mb-1">
-                      <span
-                        className="w-2.5 h-2.5 rounded-full inline-block shrink-0 shadow-sm"
-                        style={{ backgroundColor: skill.brandColor }}
-                      />
-                      <span className="font-bold text-slate-100 text-xs">
-                        {skill.name}
-                      </span>
-                    </div>
-
-                    <p className="text-[11px] text-slate-400 leading-snug pl-4">
-                      {skill.proof}
-                    </p>
-                  </div>
-                ))}
+              <div className="pt-4 mt-4 border-t border-white/[0.06] flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <span className="flex items-center gap-1 text-emerald-400">
+                  <CheckCircle2 className="w-3 h-3" />
+                  Verified through practical capstones
+                </span>
               </div>
             </SpotlightCard>
           ))}
         </div>
+
       </div>
     </section>
   );

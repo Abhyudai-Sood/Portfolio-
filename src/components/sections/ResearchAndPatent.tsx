@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PATENT_INFO, PatentFigure } from '@/data/portfolioData';
 import { SpotlightCard } from '@/components/react-bits/SpotlightCard';
-import { Award, FileCheck, CheckCircle2, Cog, ZoomIn, Users, Cpu, ShieldCheck } from 'lucide-react';
+import { Award, FileCheck, CheckCircle2, Cog, ZoomIn, Cpu, ShieldCheck, Wrench } from 'lucide-react';
 import { ImageLightboxModal } from '@/components/modals/ImageLightboxModal';
 
 export const ResearchAndPatent: React.FC = () => {
@@ -22,13 +22,13 @@ export const ResearchAndPatent: React.FC = () => {
 
   const currentFigure = PATENT_INFO.figures[selectedFigureIndex];
 
-  const handleOpenLightbox = (fig: PatentFigure) => {
+  const handleOpenLightbox = (image: string, title: string, subtitle: string, caption: string) => {
     setLightboxData({
       open: true,
-      image: fig.image,
-      title: fig.title,
-      subtitle: `Official Patent Filing (#${PATENT_INFO.applicationNo}) - ${fig.tag}`,
-      caption: fig.description,
+      image,
+      title,
+      subtitle,
+      caption,
     });
   };
 
@@ -46,7 +46,7 @@ export const ResearchAndPatent: React.FC = () => {
             Indian Patent Record
           </h2>
           <p className="text-slate-400 text-sm mt-2">
-            Sensor-integrated motorized cleaning carriage mechanism filed with the Indian Patent Office.
+            Sensor-integrated motorized cleaning carriage mechanism filed and published with the Indian Patent Office.
           </p>
         </div>
 
@@ -66,7 +66,7 @@ export const ResearchAndPatent: React.FC = () => {
                 {PATENT_INFO.title}
               </h3>
               <p className="text-xs font-mono text-cyan-300 mt-1">
-                Applicant: {PATENT_INFO.applicant}
+                Applicant Institution: {PATENT_INFO.applicant}
               </p>
             </div>
 
@@ -76,63 +76,90 @@ export const ResearchAndPatent: React.FC = () => {
             </span>
           </div>
 
-          {/* Real Inventors Grid (All 4 Inventors from official document) */}
-          <div className="mt-6 pt-2">
-            <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold mb-3 flex items-center gap-2">
-              <Users className="w-4 h-4 text-amber-400" />
-              <span>Official Co-Inventors (Indian Patent Registry):</span>
-            </h4>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              {PATENT_INFO.inventors.map((inv, idx) => (
-                <div
-                  key={idx}
-                  className={`p-3 rounded-xl border transition-all ${
-                    inv.name.includes('Abhyudai')
-                      ? 'bg-amber-500/10 border-amber-500/40 shadow-sm shadow-amber-500/10'
-                      : 'bg-white/[0.02] border-white/[0.06]'
-                  }`}
-                >
-                  <span className="text-xs font-bold text-white block">
-                    {inv.name}
-                  </span>
-                  <span className="text-[10px] font-mono text-slate-400 block mt-0.5">
-                    UID: {inv.uid}
-                  </span>
-                  <span className={`text-[10px] font-mono font-semibold block mt-1 ${
-                    inv.name.includes('Abhyudai') ? 'text-amber-300' : 'text-slate-400'
-                  }`}>
-                    {inv.role}
-                  </span>
+          {/* 1. Real Hardware Prototype Assembly (Styled just like certificates with fixed aspect ratio, NEVER covers text!) */}
+          <div className="mt-8">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                <Wrench className="w-4 h-4 text-amber-400" />
+                <span>Hardware Prototype Fabrication (University Innovation Lab)</span>
+              </h4>
+              <span className="text-[10px] font-mono text-amber-400 flex items-center gap-1">
+                <ZoomIn className="w-3 h-3" /> Click image to inspect
+              </span>
+            </div>
+
+            <div
+              onClick={() =>
+                handleOpenLightbox(
+                  PATENT_INFO.labPhoto.image,
+                  PATENT_INFO.labPhoto.title,
+                  `Indian Patent #${PATENT_INFO.applicationNo} Prototype`,
+                  PATENT_INFO.labPhoto.description
+                )
+              }
+              className="group rounded-2xl border border-white/[0.08] bg-[#0c1019]/90 backdrop-blur-xl overflow-hidden hover:border-amber-500/40 hover:shadow-xl hover:shadow-amber-500/10 transition-all duration-300 cursor-pointer"
+            >
+              {/* Image Viewport (Fixed Height, Hover Zoom Inside, Never Covers Text) */}
+              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-black/60 border-b border-white/[0.08]">
+                <img
+                  src={PATENT_INFO.labPhoto.image}
+                  alt={PATENT_INFO.labPhoto.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                
+                <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1 text-white text-xs font-mono font-bold backdrop-blur-[2px]">
+                  <ZoomIn className="w-4 h-4 text-amber-400" />
+                  <span>Click to Inspect High-Resolution</span>
                 </div>
-              ))}
+
+                <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-bold flex items-center gap-1 backdrop-blur-md">
+                  <ShieldCheck className="w-3 h-3" />
+                  Verified Lab Prototyping
+                </span>
+              </div>
+
+              {/* Text Container Below Image (Always visible) */}
+              <div className="p-5 bg-[#0c1019] space-y-1.5">
+                <h5 className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">
+                  {PATENT_INFO.labPhoto.title}
+                </h5>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  {PATENT_INFO.labPhoto.description}
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Interactive Authentic Diagram Viewer */}
-          <div className="mt-8 pt-6 border-t border-white/[0.08]">
+          {/* 2. Sequential Technical Schematics Viewer (Fig. 1 to Fig. 5 in exact sequence) */}
+          <div className="mt-10 pt-6 border-t border-white/[0.08]">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
               <div>
                 <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Cpu className="w-4 h-4 text-amber-400" />
-                  <span>Authentic Filing Schematics (Extracted from IPO Document)</span>
+                  <Cpu className="w-4 h-4 text-cyan-400" />
+                  <span>Sequential Patent Schematics (Filed with IPO)</span>
                 </h4>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  Click any schematic tab below to view system architecture diagrams.
+                  Select any figure tab below in sequential order (Fig. 1 to Fig. 5).
                 </p>
               </div>
 
-              {/* Lightbox Trigger */}
               <button
-                onClick={() => handleOpenLightbox(currentFigure)}
-                className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-mono font-medium border border-amber-500/30 flex items-center gap-1.5 transition-colors self-start sm:self-auto"
+                onClick={() =>
+                  handleOpenLightbox(
+                    currentFigure.image,
+                    currentFigure.title,
+                    `Official Patent Filing (#${PATENT_INFO.applicationNo}) - ${currentFigure.tag}`,
+                    currentFigure.description
+                  )
+                }
+                className="px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 text-xs font-mono font-medium border border-cyan-500/30 flex items-center gap-1.5 transition-colors self-start sm:self-auto"
               >
                 <ZoomIn className="w-3.5 h-3.5" />
-                <span>Inspect High-Res</span>
+                <span>Inspect Diagram</span>
               </button>
             </div>
 
-            {/* Figure Tab Switcher */}
+            {/* Sequential Figure Tabs: Fig. 1 to Fig. 5 */}
             <div className="flex flex-wrap gap-2 mb-4">
               {PATENT_INFO.figures.map((fig, idx) => (
                 <button
@@ -140,7 +167,7 @@ export const ResearchAndPatent: React.FC = () => {
                   onClick={() => setSelectedFigureIndex(idx)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all border ${
                     selectedFigureIndex === idx
-                      ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm'
+                      ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40 shadow-sm'
                       : 'bg-white/[0.03] text-slate-400 border-white/[0.06] hover:text-white hover:bg-white/[0.06]'
                   }`}
                 >
@@ -149,10 +176,17 @@ export const ResearchAndPatent: React.FC = () => {
               ))}
             </div>
 
-            {/* Diagram Display Box */}
+            {/* Diagram Display Box (Fixed Viewport, Clean Layout) */}
             <div
-              onClick={() => handleOpenLightbox(currentFigure)}
-              className="relative rounded-2xl border border-white/[0.1] bg-white/[0.02] p-4 sm:p-6 overflow-hidden cursor-pointer group hover:border-amber-500/40 transition-colors"
+              onClick={() =>
+                handleOpenLightbox(
+                  currentFigure.image,
+                  currentFigure.title,
+                  `Official Patent Filing (#${PATENT_INFO.applicationNo}) - ${currentFigure.tag}`,
+                  currentFigure.description
+                )
+              }
+              className="relative rounded-2xl border border-white/[0.1] bg-white/[0.02] p-4 sm:p-6 overflow-hidden cursor-pointer group hover:border-cyan-500/40 transition-colors"
             >
               <div className="max-h-96 w-full flex items-center justify-center overflow-hidden rounded-xl bg-white p-3">
                 <img
@@ -171,7 +205,7 @@ export const ResearchAndPatent: React.FC = () => {
                     {currentFigure.description}
                   </p>
                 </div>
-                <span className="text-[11px] font-mono text-amber-400 flex items-center gap-1 shrink-0 ml-4">
+                <span className="text-[11px] font-mono text-cyan-400 flex items-center gap-1 shrink-0 ml-4">
                   <ZoomIn className="w-3.5 h-3.5" />
                   <span>Click to zoom</span>
                 </span>
@@ -179,7 +213,7 @@ export const ResearchAndPatent: React.FC = () => {
             </div>
           </div>
 
-          {/* Technical Specifications Grid */}
+          {/* 3. Technical Specifications Grid */}
           <div className="mt-8 pt-6 border-t border-white/[0.08] grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Left: System Abstract */}
@@ -212,6 +246,10 @@ export const ResearchAndPatent: React.FC = () => {
                 <div className="flex justify-between py-2 border-b border-white/[0.06]">
                   <span className="text-slate-400">Jurisdiction</span>
                   <span className="text-white font-mono font-bold">Indian Patent Office (IPO)</span>
+                </div>
+                <div className="flex justify-between py-2 border-b border-white/[0.06]">
+                  <span className="text-slate-400">Application Number</span>
+                  <span className="text-amber-300 font-mono font-bold">{PATENT_INFO.applicationNo}</span>
                 </div>
                 <div className="flex justify-between py-2 border-b border-white/[0.06]">
                   <span className="text-slate-400">Filing Date</span>

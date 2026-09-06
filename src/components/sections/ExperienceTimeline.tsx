@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { EDUCATION, CERTIFICATES } from '@/data/portfolioData';
-import { GraduationCap, Award, Calendar, MapPin, ZoomIn, ShieldCheck, ExternalLink, Sparkles } from 'lucide-react';
+import { EDUCATION, TRAININGS, CERTIFICATES } from '@/data/portfolioData';
+import { GraduationCap, Award, Calendar, MapPin, ZoomIn, ShieldCheck, BookOpen, CheckCircle2 } from 'lucide-react';
 import { SpotlightCard } from '@/components/react-bits/SpotlightCard';
 import { ImageLightboxModal } from '@/components/modals/ImageLightboxModal';
 
@@ -37,21 +37,21 @@ export const ExperienceTimeline: React.FC = () => {
         <div className="text-center max-w-2xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-mono mb-3">
             <GraduationCap className="w-3.5 h-3.5" />
-            <span>ACADEMICS &amp; CERTIFICATIONS</span>
+            <span>ACADEMICS, TRAININGS &amp; CERTIFICATIONS</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Academic Track &amp; Verified Certificates
+            Academic Track &amp; Verified Credentials
           </h2>
           <p className="text-slate-400 text-sm mt-2">
-            Higher education milestones, historic schooling foundation, and accredited technical credentials.
+            Higher education milestones, historic schooling foundation, accredited summer trainings, and certifications.
           </p>
         </div>
 
-        {/* 1. Formal Education (Rich Institutional Cards with Photos & Authentic Badges) */}
+        {/* 1. Formal Education (Rich Institutional Cards with Infrastructure Photos & Crisp Logos) */}
         <div className="mb-16">
           <div className="flex items-center gap-2 text-sm font-mono text-cyan-400 font-bold uppercase tracking-wider mb-6">
             <GraduationCap className="w-4 h-4" />
-            <span>Higher Education &amp; Schooling (Academic Scores Stated Here)</span>
+            <span>Formal Education &amp; Academic Scores</span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -62,7 +62,7 @@ export const ExperienceTimeline: React.FC = () => {
                 className="flex flex-col justify-between overflow-hidden border-white/[0.1] bg-[#0c1019]/95"
               >
                 <div>
-                  {/* Institutional Banner Photo Header */}
+                  {/* Institutional Infrastructure Photo Header */}
                   <div
                     onClick={() =>
                       openLightbox(
@@ -72,26 +72,26 @@ export const ExperienceTimeline: React.FC = () => {
                         edu.tagline
                       )
                     }
-                    className="relative h-48 w-full overflow-hidden bg-black/60 border-b border-white/[0.08] cursor-pointer group"
+                    className="relative h-52 w-full overflow-hidden bg-black/60 border-b border-white/[0.08] cursor-pointer group"
                   >
                     <img
                       src={edu.campusImage}
-                      alt={edu.institution}
+                      alt={`${edu.institution} Campus`}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0c1019] via-[#0c1019]/40 to-transparent" />
                     
-                    {/* Official Logo / Crest Badge */}
+                    {/* Official Logo / Emblem Badge (Clear & Prominent) */}
                     <div className="absolute bottom-3 left-4 flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-xl p-1.5 bg-white/95 backdrop-blur-md shadow-lg border border-white/20 flex items-center justify-center shrink-0">
+                      <div className="h-12 px-3 py-1 rounded-xl bg-white/95 backdrop-blur-md shadow-lg border border-white/20 flex items-center justify-center shrink-0">
                         <img
                           src={edu.logoImage}
                           alt={`${edu.institution} Logo`}
-                          className="w-full h-full object-contain"
+                          className="h-9 w-auto object-contain"
                         />
                       </div>
                       <div>
-                        <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 backdrop-blur-md font-semibold">
+                        <span className="text-xs font-mono px-2.5 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 backdrop-blur-md font-semibold">
                           {edu.badge}
                         </span>
                       </div>
@@ -151,11 +151,92 @@ export const ExperienceTimeline: React.FC = () => {
           </div>
         </div>
 
-        {/* 2. Certificates Grid (STRICTLY SYMMETRIC, NON-OVERLAPPING HOVER, LIGHTBOX ZOOM) */}
+        {/* 2. Summer Trainings & Internships (ADDED right under education and before certificates!) */}
+        <div className="mb-16">
+          <div className="flex items-center gap-2 text-sm font-mono text-emerald-400 font-bold uppercase tracking-wider mb-6">
+            <BookOpen className="w-4 h-4" />
+            <span>Summer Trainings &amp; Internships (Centre for Professional Enhancement)</span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {TRAININGS.map((train) => (
+              <div
+                key={train.id}
+                onClick={() =>
+                  openLightbox(
+                    train.image,
+                    train.title,
+                    `${train.issuer} • ${train.grade}`,
+                    train.description
+                  )
+                }
+                className="group rounded-2xl border border-white/[0.08] bg-[#0c1019]/90 backdrop-blur-xl overflow-hidden hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/10 transition-all duration-300 cursor-pointer flex flex-col justify-between"
+              >
+                {/* Certificate Image Viewport (Fixed Aspect Ratio, Internal Zoom, Never covers text!) */}
+                <div className="relative h-56 w-full overflow-hidden bg-black/70 border-b border-white/[0.08]">
+                  <img
+                    src={train.image}
+                    alt={train.title}
+                    className="w-full h-full object-contain p-2 transition-transform duration-300 group-hover:scale-105"
+                  />
+                  
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1 text-white text-xs font-mono font-bold backdrop-blur-[2px]">
+                    <ZoomIn className="w-4 h-4 text-emerald-400" />
+                    <span>Click to Inspect Certificate</span>
+                  </div>
+
+                  <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-mono font-bold flex items-center gap-1 backdrop-blur-md">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                    {train.grade} &bull; Verified
+                  </span>
+                </div>
+
+                {/* Content Container (Always Visible, Never Covered) */}
+                <div className="p-6 flex-1 flex flex-col justify-between space-y-3 bg-[#0c1019]">
+                  <div>
+                    <h4 className="text-base font-bold text-white group-hover:text-emerald-300 transition-colors leading-snug">
+                      {train.title}
+                    </h4>
+                    <p className="text-xs font-mono text-emerald-400 mt-1">
+                      {train.issuer}
+                    </p>
+                    <div className="flex items-center gap-3 text-xs text-slate-400 font-mono mt-1">
+                      <span>{train.duration}</span>
+                      <span>&bull;</span>
+                      <span className="text-slate-300">{train.credentialId}</span>
+                    </div>
+                    <p className="text-xs text-slate-300 mt-2.5 leading-relaxed">
+                      {train.description}
+                    </p>
+
+                    <div className="mt-3 p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center gap-2">
+                      <span className="text-[10px] font-mono text-slate-400 uppercase">Capstone Project:</span>
+                      <span className="text-xs font-bold text-cyan-300">{train.capstone}</span>
+                    </div>
+                  </div>
+
+                  {/* Skills tags */}
+                  <div className="flex flex-wrap gap-1.5 pt-3 border-t border-white/[0.06]">
+                    {train.skills.map((s, i) => (
+                      <span
+                        key={i}
+                        className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20"
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 3. Verified Certificates Grid (Strictly Symmetric, Non-Overlapping Hover, Lightbox Zoom) */}
         <div>
           <div className="flex items-center gap-2 text-sm font-mono text-violet-400 font-bold uppercase tracking-wider mb-6">
             <Award className="w-4 h-4" />
-            <span>Verified Certificates &amp; Technical Credentials (Click to Enlarge)</span>
+            <span>Additional Verified Certificates &amp; Technical Credentials</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -191,7 +272,7 @@ export const ExperienceTimeline: React.FC = () => {
                   </span>
                 </div>
 
-                {/* Bottom Content Container (ALWAYS VISIBLE, NEVER HIDDEN OR OVERLAPPED!) */}
+                {/* Bottom Content Container (Always Visible, Never Hidden) */}
                 <div className="p-5 flex-1 flex flex-col justify-between space-y-3 bg-[#0c1019]">
                   <div>
                     <h4 className="text-sm font-bold text-white group-hover:text-violet-300 transition-colors leading-snug">

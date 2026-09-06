@@ -1,462 +1,272 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-  MessageSquare,
-  X,
-  Send,
-  Sparkles,
-  Bot,
-  User,
-  Download,
-  ExternalLink,
-  Award,
-  Globe,
-  RotateCcw,
-} from 'lucide-react';
-import { PERSONAL_INFO, PATENT_INFO, PROJECTS } from '@/data/portfolioData';
+import { Bot, X, Send, Sparkles, MessageSquare, Mail, ArrowUpRight, ExternalLink } from 'lucide-react';
+import { PERSONAL_INFO, PROJECTS, PATENT_INFO, EDUCATION, TRAININGS, SKILL_CATEGORIES } from '@/data/portfolioData';
 
-interface ChatMessage {
-  id: string;
-  sender: 'user' | 'bot';
+interface Message {
+  sender: 'bot' | 'user';
   text: string;
-  language?: string;
-  action?: {
-    type: 'download_resume' | 'open_link' | 'view_patent';
-    label: string;
-    url?: string;
-  };
-  timestamp: string;
+  isFallback?: boolean;
+  unansweredQuery?: string;
 }
 
-const INITIAL_GREETING: Record<string, string> = {
-  en: `Hello! I am Abhyudai's AI Assistant. Ask me anything about his Full-Stack capabilities, Indian Patent (#202511067767), DSA projects, or academic record at LPU (CGPA: 8.06). How can I assist you?`,
-  hi: `नमस्ते! मैं अभ्युदय का AI असिस्टेंट हूँ। आप मुझसे उनके फुल-स्टैक प्रोजेक्ट्स, भारतीय पेटेंट (#202511067767), डेटा स्ट्रक्चर्स (Java/C++) या LPU (CGPA: 8.06) के बारे में कुछ भी पूछ सकते हैं।`,
-  pb: `ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ ਅਭਿਉਦੈ ਦਾ AI ਅਸਿਸਟੈਂਟ ਹਾਂ। ਤੁਸੀਂ ਉਹਨਾਂ ਦੇ ਪ੍ਰੋਜੈਕਟਾਂ, ਪੇਟੈਂਟ (#202511067767), ਅਤੇ ਫੁੱਲ-ਸਟੈਕ ਹੁਨਰ ਬਾਰੇ ਪੁੱਛ ਸਕਦੇ ਹੋ।`,
-  es: `¡Hola! Soy el asistente de IA de Abhyudai. Pregúntame sobre sus proyectos Full-Stack, su Patente India (#202511067767) o su formación académica en LPU.`,
-  fr: `Bonjour! Je suis l'assistant IA d'Abhyudai. Posez-moi des questions sur ses compétences Full-Stack, son brevet indien (#202511067767) ou ses projets.`,
-};
+interface ResumeChatbotProps {
+  onOpenResume?: () => void;
+}
 
-const PROMPT_SUGGESTIONS = [
-  { label: '🏆 Indian Patent Details', query: 'Tell me about your Indian patent and how it works.' },
-  { label: '💻 Full-Stack Skills', query: 'What full-stack and web development technologies do you use?' },
-  { label: '🩸 Smart Blood Donation', query: 'Explain the Smart Blood Donation Network project and its data structures.' },
-  { label: '📄 Get Resume', query: 'Can I download your resume?' },
-  { label: '🇮🇳 हिंदी में बताओ', query: 'अभ्युदय के बारे में हिंदी में संक्षेप में बताएं।' },
-];
-
-export const ResumeChatbot: React.FC<{ onOpenResume: () => void }> = ({ onOpenResume }) => {
+export const ResumeChatbot: React.FC<ResumeChatbotProps> = ({ onOpenResume }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [lang, setLang] = useState<'en' | 'hi' | 'pb' | 'es' | 'fr'>('en');
   const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([
+  const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
       sender: 'bot',
-      text: INITIAL_GREETING.en,
-      language: 'en',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      text: `Hello! I am Abhyudai's Portfolio AI Assistant. You can ask me about his software projects, technical skills, Indian Patent, education at LPU, or school background. If there is something I cannot answer, you can send your inquiry directly to his email!`,
     },
   ]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping]);
-
-  const handleLanguageChange = (newLang: 'en' | 'hi' | 'pb' | 'es' | 'fr') => {
-    setLang(newLang);
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: Date.now().toString(),
-        sender: 'bot',
-        text: INITIAL_GREETING[newLang] || INITIAL_GREETING.en,
-        language: newLang,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      },
-    ]);
   };
 
-  // Comprehensive Knowledge Engine
-  const generateResponse = (userQuery: string): ChatMessage => {
-    const q = userQuery.toLowerCase().trim();
-    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  useEffect(() => {
+    if (isOpen) {
+      scrollToBottom();
+    }
+  }, [messages, isOpen]);
 
-    // 1. Check for Hindi / Hinglish
-    const isHindi =
-      /[\u0900-\u097F]/.test(userQuery) ||
-      q.includes('hindi') ||
-      q.includes('batao') ||
-      q.includes('kya') ||
-      q.includes('kaun');
+  // Answer specifically with respect to what the user asks
+  const generateResponse = (query: string): Message => {
+    const q = query.toLowerCase().trim();
 
-    // 2. Patent Queries
-    if (
-      q.includes('patent') ||
-      q.includes('window') ||
-      q.includes('cleaning') ||
-      q.includes('202511067767') ||
-      q.includes('invention')
-    ) {
-      if (isHindi) {
-        return {
-          id: Date.now().toString(),
-          sender: 'bot',
-          text: `अभ्युदय ने **भारतीय पेटेंट (एप्लीकेशन #202511067767)** फाइल किया है, जिसका नाम है **"Automated Sliding Window Track Cleaning System"**। यह एक स्वायत्त मोटराइज्ड कैरिज है जो सेंसर और आटोमेटिक स्वीपिंग से स्लाइडिंग खिड़कियों के ट्रैक साफ करता है।`,
-          action: { type: 'view_patent', label: 'View Patent Schematic' },
-          timestamp: time,
-        };
-      }
+    // 1. Contact / Hiring / Email / Phone
+    if (q.includes('contact') || q.includes('email') || q.includes('phone') || q.includes('reach') || q.includes('hire') || q.includes('call')) {
       return {
-        id: Date.now().toString(),
         sender: 'bot',
-        text: `Abhyudai filed an **Indian Patent Application (#${PATENT_INFO.applicationNo})** for the **"${PATENT_INFO.title}"** (March 2025 - July 2025). It is an autonomous electromechanical carriage featuring obstacle-detection sensors, bi-directional track traversing, and automated debris sweeping designed to eliminate manual architectural maintenance.`,
-        action: { type: 'view_patent', label: 'View Patent Details' },
-        timestamp: time,
+        text: `You can reach Abhyudai directly at:\n• Email: ${PERSONAL_INFO.email}\n• Phone: ${PERSONAL_INFO.phone}\n• LinkedIn: ${PERSONAL_INFO.linkedin}\nHe is actively available for Software Engineering and Full-Stack / AI roles!`,
       };
     }
 
-    // 3. Resume / CV Download
-    if (q.includes('resume') || q.includes('cv') || q.includes('download') || q.includes('pdf')) {
+    // 2. Resume / CV
+    if (q.includes('resume') || q.includes('cv') || q.includes('download')) {
+      if (onOpenResume) onOpenResume();
       return {
-        id: Date.now().toString(),
         sender: 'bot',
-        text: isHindi
-          ? `आप अभ्युदय का आधिकारिक रिज्यूमे नीचे दिए गए बटन से सीधे डाउनलोड कर सकते हैं:`
-          : `You can download Abhyudai's official verified resume (PDF) directly using the action button below:`,
-        action: { type: 'download_resume', label: 'Download Abhyudai\'s Resume (PDF)' },
-        timestamp: time,
+        text: `I've opened the CV modal for you! You can also download his official PDF resume using the Download CV button at the top.`,
       };
     }
 
-    // 4. Full-Stack / Web Development
-    if (
-      q.includes('full-stack') ||
-      q.includes('fullstack') ||
-      q.includes('web') ||
-      q.includes('frontend') ||
-      q.includes('react') ||
-      q.includes('javascript')
-    ) {
-      if (isHindi) {
-        return {
-          id: Date.now().toString(),
-          sender: 'bot',
-          text: `अभ्युदय फुल-स्टैक वेब डेवलपमेंट में पूरी तरह दक्ष हैं: **JavaScript (ES6+), React, HTML5, CSS3, Tailwind CSS, Chart.js, Leaflet.js और REST APIs**। उन्होंने ACADEX (SPI कैलकुलेटर) और WHTS (NGO पोर्टल) जैसे लाइव वेब प्लेटफॉर्म विकसित किए हैं।`,
-          timestamp: time,
-        };
-      }
+    // 3. Indian Patent
+    if (q.includes('patent') || q.includes('window') || q.includes('cleaner') || q.includes('invention') || q.includes('hardware') || q.includes('arduino')) {
       return {
-        id: Date.now().toString(),
         sender: 'bot',
-        text: `Yes! Abhyudai is actively targeting **Full-Stack Developer & Software Engineering** roles. His stack covers **JavaScript (ES6+), React, HTML5, CSS3, Tailwind CSS, Leaflet.js, Chart.js, REST APIs, and SQL**. He has built live web applications like the ACADEX Academic Index, WHTS NGO platform, and TraceX system telemetry tools.`,
-        action: { type: 'open_link', label: 'View GitHub Projects', url: PERSONAL_INFO.github },
-        timestamp: time,
+        text: `Abhyudai is an official co-inventor of Indian Patent Application #${PATENT_INFO.applicationNo} ("${PATENT_INFO.title}"), filed with the Indian Patent Office on ${PATENT_INFO.filingDate} and published on ${PATENT_INFO.publicationDate}. It features an automated motorized carriage with optical dust sensors, water level safety, and Arduino UNO control for sliding window grooves. You can view the authentic lab photos and sequential diagrams in the Patent section!`,
       };
     }
 
-    // 5. Smart Blood Donation / Java DSA
-    if (q.includes('blood') || q.includes('donation') || q.includes('java') || q.includes('dsa') || q.includes('data structure')) {
+    // 4. TraceX (OS simulation)
+    if (q.includes('tracex') || q.includes('os') || q.includes('operating system') || q.includes('syscall') || q.includes('fork')) {
+      const p = PROJECTS.find((x) => x.id === 'tracex');
       return {
-        id: Date.now().toString(),
         sender: 'bot',
-        text: `In **Smart Blood Donation & Emergency Network**, Abhyudai implemented advanced Java DSA architectures:
-• **Nested HashMaps**: Enabled O(1) instantaneous donor lookups by blood group and city.
-• **PriorityQueue**: Built an emergency triage dispatch pipeline prioritizing urgent critical cases.
-• **Dynamic LinkedLists & Stacks**: Managed donor history and undo/redo operations with a Java Swing GUI.`,
-        action: { type: 'open_link', label: 'View Project on GitHub', url: 'https://github.com/Abhyudai-Sood/LeetCode' },
-        timestamp: time,
+        text: `TraceX is an interactive web-based Operating System simulator built by Abhyudai demonstrating POSIX system calls (fork, exec, read, write, exit), memory allocation, and process lifecycle with Chart.js analytics.\nRepository: ${p?.githubUrl}`,
       };
     }
 
-    // 6. Opti-Reach AI
-    if (q.includes('opti') || q.includes('reach') || q.includes('health') || q.includes('ai') || q.includes('machine learning')) {
+    // 5. Smart Blood Donation Network
+    if (q.includes('blood') || q.includes('donor') || q.includes('donation') || q.includes('hospital')) {
+      const p = PROJECTS.find((x) => x.id === 'smart-blood-donation');
       return {
-        id: Date.now().toString(),
         sender: 'bot',
-        text: `**Opti-Reach** is an AI-powered rural healthcare logistics platform:
-• **Linear Regression**: Evaluates demographic vulnerability factors to assign automated priority scores to underserved villages.
-• **Genetic Algorithm**: Solves doctor-village-slot routing to reduce travel time by ~35% while eliminating scheduling conflicts.
-• **Interactive Mapping**: Built using Leaflet.js and Chart.js for real-time visualization.`,
-        action: { type: 'open_link', label: 'Explore on GitHub', url: PERSONAL_INFO.github },
-        timestamp: time,
+        text: `The Smart Blood Donation & Emergency Matching Network is a high-performance Java system using Nested HashMaps for O(1) average donor lookup by blood group and city, and a PriorityQueue for emergency triage dispatch.\nRepository: ${p?.githubUrl}`,
       };
     }
 
-    // 7. TraceX
-    if (q.includes('tracex') || q.includes('os') || q.includes('syscall') || q.includes('operating system')) {
+    // 6. Opti-Reach
+    if (q.includes('opti') || q.includes('reach') || q.includes('health') || q.includes('camp') || q.includes('genetic') || q.includes('regression')) {
+      const p = PROJECTS.find((x) => x.id === 'opti-reach');
       return {
-        id: Date.now().toString(),
         sender: 'bot',
-        text: `**TraceX** is an interactive web-based Operating System visualizer that traces low-level POSIX system calls (fork, exec, read, write) and visualizes CPU scheduling, PID life cycles, and memory distribution with Chart.js charts.`,
-        action: { type: 'open_link', label: 'View TraceX on GitHub', url: 'https://github.com/Abhyudai-Sood/TraceX' },
-        timestamp: time,
+        text: `Opti-Reach is an AI-driven rural healthcare optimization suite using Linear Regression for village distress priority scoring and a Genetic Algorithm for doctor-slot allocation and conflict reduction.\nRepository: ${p?.githubUrl}`,
       };
     }
 
-    // 8. Education & CGPA
-    if (q.includes('education') || q.includes('cgpa') || q.includes('college') || q.includes('lpu') || q.includes('school')) {
+    // 7. ACADEX or WHTS
+    if (q.includes('acadex') || q.includes('spi') || q.includes('calculator') || q.includes('whts') || q.includes('stray') || q.includes('ngo')) {
       return {
-        id: Date.now().toString(),
         sender: 'bot',
-        text: `Abhyudai is pursuing his **B.Tech in Computer Science & Engineering** at **Lovely Professional University (LPU)** with a strong **CGPA of 8.06**. Prior to that, he completed his Intermediate (PCM) at **St. Edwards School, Shimla** with 72%.`,
-        timestamp: time,
+        text: `• ACADEX: Student Performance Index suite calculating SPI, CGPA, and backlogs (Repo: https://github.com/Abhyudai-Sood/SPI_Calculator)\n• WHTS: NGO portal for animal welfare with donation and membership pipelines (Repo: https://github.com/Abhyudai-Sood/We-Help-The-Strays).`,
       };
     }
 
-    // 9. Contact / Hiring
-    if (q.includes('contact') || q.includes('email') || q.includes('hire') || q.includes('interview') || q.includes('available')) {
+    // 8. General Projects
+    if (q.includes('project') || q.includes('work') || q.includes('built') || q.includes('github') || q.includes('portfolio')) {
       return {
-        id: Date.now().toString(),
         sender: 'bot',
-        text: `Abhyudai is immediately available for Full-Stack Developer & Software Engineering internships and roles!
-• **Email**: ${PERSONAL_INFO.email}
-• **LinkedIn**: linkedin.com/in/abhyudai-sood/
-• **GitHub**: github.com/Abhyudai-Sood`,
-        action: { type: 'open_link', label: 'Open LinkedIn Profile', url: PERSONAL_INFO.linkedin },
-        timestamp: time,
+        text: `Abhyudai has built 5+ major projects:\n1. TraceX (OS Syscall Simulator)\n2. Smart Blood Donation Network (Java DSA O(1))\n3. Opti-Reach (AI Route & Schedule Optimization)\n4. ACADEX (Academic Telemetry)\n5. WHTS (Animal Welfare NGO Portal)\nEvery project tile in the Projects section has a direct GitHub repository link!`,
       };
     }
 
-    // Default Fallback
-    if (isHindi) {
+    // 9. Education & School
+    if (q.includes('education') || q.includes('college') || q.includes('university') || q.includes('lpu') || q.includes('cgpa') || q.includes('school') || q.includes('edward') || q.includes('marks')) {
       return {
-        id: Date.now().toString(),
         sender: 'bot',
-        text: `अभ्युदय सूद LPU में B.Tech CSE के छात्र हैं (CGPA: 8.06)। वे फुल-स्टैक वेब डेवलपमेंट, C++, Java, Python, और एल्गोरिदम में निपुण हैं, और उनके नाम पर स्लाइडिंग विंडो क्लीनिंग सिस्टम का भारतीय पेटेंट (#202511067767) दर्ज है। आप उनके प्रोजेक्ट्स या रिज्यूमे के बारे में भी पूछ सकते हैं!`,
-        action: { type: 'download_resume', label: 'Download Resume (PDF)' },
-        timestamp: time,
+        text: `• College: Lovely Professional University (Punjab) — B.Tech Computer Science & Engineering (2024–2028), CGPA: 8.06 / 10.0 (NAAC A++).\n• School: St. Edward's School, Shimla (Est. 1925 by Christian Brothers) — Class XII: 72.0%, Class X: 85.6%. Renowned heritage institution with notable alumni like CDS Gen. Bipin Rawat.`,
       };
     }
 
+    // 10. Summer Trainings
+    if (q.includes('training') || q.includes('internship') || q.includes('summer') || q.includes('merit')) {
+      return {
+        sender: 'bot',
+        text: `Abhyudai completed two verified Summer Trainings at LPU Centre for Professional Enhancement (both with Grade A):\n1. Logic Building, Programming & Data Structures (C++, STL, Recursion, DP)\n2. Data Structures Fundamentals: Basics to Applications (Java, HashMaps, PriorityQueues, Trees). You can inspect the official certificates in the Education section!`,
+      };
+    }
+
+    // 11. Skills & Tech Stack
+    if (q.includes('skill') || q.includes('language') || q.includes('java') || q.includes('python') || q.includes('c++') || q.includes('sql') || q.includes('react') || q.includes('dsa')) {
+      return {
+        sender: 'bot',
+        text: `Abhyudai's core technical stack includes:\n• Languages: C++, Java, Python, C, JavaScript, SQL\n• Frameworks/Libraries: Java Collections Framework, C++ STL, Chart.js, Leaflet.js, React, Tailwind CSS\n• Soft Skills: Problem Solving, Team Collaboration, Project Management, Technical Documentation.`,
+      };
+    }
+
+    // 12. Fallback: Bot does NOT invent answers. Instead, it provides a direct email link to Abhyudai!
     return {
-      id: Date.now().toString(),
       sender: 'bot',
-      text: `Abhyudai Sood is a Full-Stack Developer & Software Engineer pursuing B.Tech CSE at Lovely Professional University (CGPA: 8.06). He holds Indian Patent #202511067767 for an automated electromechanical cleaning system and has engineered robust applications in Java, C++, JavaScript, React, and Python. Would you like to know about his projects, skills, or download his resume?`,
-      action: { type: 'download_resume', label: 'Download Resume (PDF)' },
-      timestamp: time,
+      text: `I don't have that specific detail in Abhyudai's official portfolio knowledge base. However, you can send this inquiry directly to Abhyudai's email so he can respond to you personally!`,
+      isFallback: true,
+      unansweredQuery: query,
     };
   };
 
   const handleSend = () => {
     if (!input.trim()) return;
-
-    const userText = input;
+    const userMsg: Message = { sender: 'user', text: input };
+    const botReply = generateResponse(input);
+    setMessages((prev) => [...prev, userMsg, botReply]);
     setInput('');
-
-    const userMsg: ChatMessage = {
-      id: Date.now().toString(),
-      sender: 'user',
-      text: userText,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
-
-    setMessages((prev) => [...prev, userMsg]);
-    setIsTyping(true);
-
-    setTimeout(() => {
-      const botResponse = generateResponse(userText);
-      setMessages((prev) => [...prev, botResponse]);
-      setIsTyping(false);
-    }, 450);
   };
 
-  const handleActionClick = (action: ChatMessage['action']) => {
-    if (!action) return;
-    if (action.type === 'download_resume') {
-      onOpenResume();
-    } else if (action.type === 'open_link' && action.url) {
-      window.open(action.url, '_blank');
-    } else if (action.type === 'view_patent') {
-      const el = document.getElementById('patent');
-      el?.scrollIntoView({ behavior: 'smooth' });
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSend();
     }
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      {/* Floating Launcher Button */}
-      <AnimatePresence>
-        {!isOpen && (
-          <motion.button
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+    <>
+      {/* Floating Trigger Button */}
+      {!isOpen && (
+        <div className="fixed bottom-6 right-6 z-40">
+          <button
             onClick={() => setIsOpen(true)}
-            className="flex items-center gap-2.5 px-4 py-3 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium shadow-2xl shadow-cyan-500/30 border border-cyan-400/40 backdrop-blur-xl group cursor-pointer"
+            className="flex items-center gap-2.5 px-4 py-3 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium shadow-2xl shadow-cyan-500/30 border border-cyan-400/40 backdrop-blur-xl group cursor-pointer hover:scale-105 transition-all"
           >
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white" />
+            <Bot className="w-5 h-5 text-cyan-100" />
+            <span className="text-xs font-mono font-semibold tracking-wider">
+              Ask Abhyudai AI
             </span>
-            <Bot className="w-5 h-5 text-white group-hover:rotate-12 transition-transform" />
-            <span className="text-sm font-semibold tracking-tight">Ask Abhyudai AI</span>
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-white/20 uppercase tracking-widest">
-              Multi
+            <span className="px-1.5 py-0.5 rounded bg-white/20 text-[9px] font-mono uppercase tracking-widest font-bold">
+              PORTFOLIO
             </span>
-          </motion.button>
-        )}
-      </AnimatePresence>
+          </button>
+        </div>
+      )}
 
-      {/* Floating Chatbot Window */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 30, scale: 0.95 }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="w-[92vw] sm:w-[420px] h-[580px] rounded-3xl bg-[#090c14]/95 border border-cyan-500/30 backdrop-blur-2xl shadow-2xl shadow-black/80 flex flex-col overflow-hidden"
-          >
-            {/* Header */}
-            <div className="p-4 bg-gradient-to-r from-cyan-950/40 via-blue-950/30 to-purple-950/40 border-b border-white/[0.08] flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20">
-                  <Bot className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-bold text-sm text-white">Abhyudai AI</span>
-                    <span className="px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono">
-                      Active
-                    </span>
-                  </div>
-                  <span className="text-[11px] text-slate-400 block font-mono">
-                    Multilingual Portfolio Assistant
-                  </span>
+      {/* Chat Window */}
+      {isOpen && (
+        <div className="fixed bottom-6 right-6 z-50 w-[92vw] sm:w-96 rounded-2xl border border-white/[0.12] bg-[#0c1019]/95 backdrop-blur-2xl shadow-2xl shadow-black/80 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+          
+          {/* Header */}
+          <div className="p-4 border-b border-white/[0.08] bg-[#090c13] flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 p-[1px] flex items-center justify-center">
+                <div className="w-full h-full bg-[#0c1019] rounded-[11px] flex items-center justify-center">
+                  <Bot className="w-4 h-4 text-cyan-400" />
                 </div>
               </div>
-
-              {/* Language Selector & Close */}
-              <div className="flex items-center gap-2">
-                <div className="relative group">
-                  <button
-                    title="Change Language"
-                    className="p-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-slate-300 text-xs flex items-center gap-1 transition-colors"
-                  >
-                    <Globe className="w-3.5 h-3.5 text-cyan-400" />
-                    <span className="uppercase font-mono text-[10px]">{lang}</span>
-                  </button>
-                  <div className="absolute right-0 top-full mt-1 hidden group-hover:flex flex-col bg-[#0f1422] border border-white/10 rounded-xl p-1 shadow-2xl z-50 text-xs">
-                    <button onClick={() => handleLanguageChange('en')} className="px-3 py-1 text-left hover:bg-white/10 rounded-lg text-slate-200">English</button>
-                    <button onClick={() => handleLanguageChange('hi')} className="px-3 py-1 text-left hover:bg-white/10 rounded-lg text-slate-200">हिंदी (Hindi)</button>
-                    <button onClick={() => handleLanguageChange('pb')} className="px-3 py-1 text-left hover:bg-white/10 rounded-lg text-slate-200">ਪੰਜਾਬੀ (Punjabi)</button>
-                    <button onClick={() => handleLanguageChange('es')} className="px-3 py-1 text-left hover:bg-white/10 rounded-lg text-slate-200">Español</button>
-                    <button onClick={() => handleLanguageChange('fr')} className="px-3 py-1 text-left hover:bg-white/10 rounded-lg text-slate-200">Français</button>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="p-1.5 rounded-lg bg-white/[0.06] hover:bg-red-500/20 text-slate-400 hover:text-red-400 transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+              <div>
+                <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
+                  <span>Abhyudai AI Assistant</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                </h4>
+                <p className="text-[10px] font-mono text-slate-400">
+                  Accurate CV, Projects &amp; Patent Answers
+                </p>
               </div>
             </div>
 
-            {/* Messages Scroll Area */}
-            <div className="flex-1 p-4 overflow-y-auto space-y-4 text-sm">
-              {messages.map((m) => (
-                <div
-                  key={m.id}
-                  className={`flex gap-2.5 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  {m.sender === 'bot' && (
-                    <div className="w-7 h-7 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center flex-shrink-0 mt-0.5 border border-cyan-500/30">
-                      <Bot className="w-4 h-4" />
-                    </div>
-                  )}
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
 
-                  <div className={`max-w-[82%] space-y-2 ${m.sender === 'user' ? 'text-right' : 'text-left'}`}>
-                    <div
-                      className={`p-3 rounded-2xl leading-relaxed ${
-                        m.sender === 'user'
-                          ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-tr-sm shadow-md'
-                          : 'bg-white/[0.05] border border-white/[0.08] text-slate-200 rounded-tl-sm backdrop-blur-md'
-                      }`}
-                    >
-                      <p className="whitespace-pre-line">{m.text}</p>
-
-                      {/* Interactive Action Button if present */}
-                      {m.action && (
-                        <div className="pt-2.5 mt-2 border-t border-white/[0.1]">
-                          <button
-                            onClick={() => handleActionClick(m.action)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/40 text-xs font-medium transition-colors shadow-sm"
-                          >
-                            {m.action.type === 'download_resume' && <Download className="w-3.5 h-3.5" />}
-                            {m.action.type === 'open_link' && <ExternalLink className="w-3.5 h-3.5" />}
-                            {m.action.type === 'view_patent' && <Award className="w-3.5 h-3.5" />}
-                            <span>{m.action.label}</span>
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                    <span className="text-[10px] text-slate-500 font-mono px-1 block">
-                      {m.timestamp}
-                    </span>
-                  </div>
-
-                  {m.sender === 'user' && (
-                    <div className="w-7 h-7 rounded-xl bg-blue-600/30 text-blue-300 flex items-center justify-center flex-shrink-0 mt-0.5 border border-blue-500/30">
-                      <User className="w-4 h-4" />
-                    </div>
-                  )}
-                </div>
-              ))}
-
-              {isTyping && (
-                <div className="flex items-center gap-2 text-xs text-slate-400 font-mono px-2">
-                  <div className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" />
-                  <div className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.2s]" />
-                  <div className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.4s]" />
-                  <span>Abhyudai AI is formulating answer...</span>
-                </div>
-              )}
-              <div ref={messagesEndRef} />
-            </div>
-
-            {/* Quick Suggestions Chips */}
-            <div className="p-2.5 bg-black/40 border-t border-white/[0.06] overflow-x-auto flex gap-2 no-scrollbar">
-              {PROMPT_SUGGESTIONS.map((s, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    setInput(s.query);
-                  }}
-                  className="px-2.5 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-cyan-300 text-[11px] whitespace-nowrap border border-white/[0.06] transition-colors"
-                >
-                  {s.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Input Bar */}
-            <div className="p-3 bg-[#0c101a] border-t border-white/[0.08] flex items-center gap-2">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                placeholder={lang === 'hi' ? 'अभ्युदय के बारे में कुछ भी पूछें...' : 'Ask about projects, patent, CGPA, stack...'}
-                className="flex-1 bg-white/[0.05] border border-white/[0.1] rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
-              />
-              <button
-                onClick={handleSend}
-                disabled={!input.trim()}
-                className="p-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 disabled:opacity-40 text-black transition-colors cursor-pointer"
+          {/* Messages Feed */}
+          <div className="p-4 space-y-3.5 h-80 overflow-y-auto text-xs">
+            {messages.map((m, idx) => (
+              <div
+                key={idx}
+                className={`flex flex-col ${
+                  m.sender === 'user' ? 'items-end' : 'items-start'
+                }`}
               >
-                <Send className="w-4 h-4" />
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+                <div
+                  className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 leading-relaxed ${
+                    m.sender === 'user'
+                      ? 'bg-cyan-500 text-black font-medium'
+                      : 'bg-white/[0.04] text-slate-200 border border-white/[0.06]'
+                  }`}
+                >
+                  <p className="whitespace-pre-line">{m.text}</p>
+                </div>
+
+                {/* Direct Email Button if Bot cannot answer */}
+                {m.isFallback && (
+                  <div className="mt-2 ml-1">
+                    <a
+                      href={`mailto:${PERSONAL_INFO.email}?subject=${encodeURIComponent(
+                        `Portfolio Inquiry: ${m.unansweredQuery || 'Question for Abhyudai'}`
+                      )}&body=${encodeURIComponent(
+                        `Hi Abhyudai,\n\nI had a question regarding your portfolio:\n"${m.unansweredQuery}"\n\nLooking forward to hearing from you!`
+                      )}`}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-[11px] font-mono font-semibold transition-all shadow-sm"
+                    >
+                      <Mail className="w-3.5 h-3.5" />
+                      <span>Send Query Directly to Abhyudai</span>
+                      <ArrowUpRight className="w-3 h-3" />
+                    </a>
+                  </div>
+                )}
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Input Bar */}
+          <div className="p-3 border-t border-white/[0.08] bg-[#090c13] flex items-center gap-2">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Ask about projects, patent, skills..."
+              className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 font-mono"
+            />
+            <button
+              onClick={handleSend}
+              disabled={!input.trim()}
+              className="p-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 disabled:opacity-40 text-black transition-colors cursor-pointer"
+            >
+              <Send className="w-4 h-4" />
+            </button>
+          </div>
+
+        </div>
+      )}
+    </>
   );
 };

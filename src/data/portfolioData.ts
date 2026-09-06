@@ -30,6 +30,19 @@ export interface CertificateItem {
   skills: string[];
 }
 
+export interface TrainingItem {
+  id: string;
+  title: string;
+  issuer: string;
+  duration: string;
+  grade: string;
+  credentialId: string;
+  image: string;
+  description: string;
+  skills: string[];
+  capstone: string;
+}
+
 export interface PatentFigure {
   id: string;
   title: string;
@@ -40,11 +53,10 @@ export interface PatentFigure {
 
 export const PERSONAL_INFO = {
   name: "Abhyudai Sood",
-  // Full title without abbreviations as requested by the user
   title: "Software Engineer • Full-Stack Developer • Artificial Intelligence and Machine Learning",
   tagline: "Algorithms & Low-Level Systems • Applied AI & ML • Hardware-Software Innovation",
   headline: "Designing scalable full-stack applications, intelligent AI models, and algorithmic systems with computational rigor.",
-  bio: "Computer Science undergraduate specializing in Artificial Intelligence & Machine Learning at Lovely Professional University. Skilled in C++, Java, Python, React, and SQL. Official Indian Patent Co-Inventor (#202411039860) for autonomous sensor-guided electromechanical cleaning systems.",
+  bio: "Computer Science undergraduate specializing in Artificial Intelligence & Machine Learning at Lovely Professional University. Experienced in C++, Java, Python, SQL, JavaScript, HTML, CSS, React, and modern UI engineering. Official Indian Patent Co-Inventor (#202411039860) for an autonomous sensor-guided electromechanical cleaning system. Passionate about solving real-world challenges through data structure optimizations, OS simulations, and machine learning route allocation.",
   location: "Shimla, HP & Punjab, India",
   timezone: "Asia/Kolkata (IST)",
   email: "abhyudai.edwards@gmail.com",
@@ -72,14 +84,7 @@ export const PATENT_INFO = {
   publicationDate: "June 7, 2024",
   jurisdiction: "Indian Patent Office (IPO)",
   applicant: "Lovely Professional University",
-  // All 4 real inventors from the official filing document
-  inventors: [
-    { name: "Dr. Rajeev Kumar Patial", uid: "12301", role: "Faculty Mentor / Lead Researcher" },
-    { name: "Shrey Hiral Kansara", uid: "12419425", role: "Student Co-Inventor" },
-    { name: "Himanshu Kumar", uid: "12409315", role: "Student Co-Inventor" },
-    { name: "Abhyudai Sood", uid: "12400588", role: "Student Co-Inventor" },
-  ],
-  abstract: "An autonomous motorized electromechanical cleaning carriage engineered specifically for sliding window tracks and architectural grooves. The system integrates optical dust sensors, water level and turbidity monitoring, real-time clock (RTC) scheduling, and an Arduino UNO micro-controller to automate dust collection, washing, and track maintenance without manual labor.",
+  abstract: "An autonomous motorized electromechanical cleaning carriage engineered specifically for sliding window tracks and architectural grooves. The system integrates optical dust sensors, water level and turbidity monitoring, real-time clock (RTC) scheduling, and an Arduino UNO microcontroller to automate dust collection, washing, and track maintenance without manual labor.",
   keyFeatures: [
     "Arduino UNO Microcontroller & RTC Real-Time Scheduling",
     "Optical Dust Sensor & Turbidity Feedback for Condition-Based Cleaning",
@@ -89,7 +94,22 @@ export const PATENT_INFO = {
     "Official Indian Patent Application #202411039860 (Published June 7, 2024)"
   ],
   category: "Robotics & Embedded Systems Patent",
+  // Prototype fabrication real laboratory photo
+  labPhoto: {
+    title: "Prototype Chassis Assembly & Lab Prototyping",
+    tag: "Hardware Prototyping",
+    description: "Physical hardware fabrication of the automated window track cleaner carriage in the university lab, showcasing the acrylic enclosure, LCD status display mounting, pulley alignment, and sensor wiring.",
+    image: "/patent/patent_prototype_lab.jpg"
+  },
+  // Sequential figures: Fig 1 to Fig 5
   figures: [
+    {
+      id: "fig1",
+      title: "Fig. 1: System Operation Flowchart",
+      tag: "Control Logic",
+      description: "Decision logic flow chart: time trigger, dust detection threshold comparison, washing sequence execution, and safety termination.",
+      image: "/patent/patent_flow_diagram.png"
+    },
     {
       id: "fig2",
       title: "Fig. 2: System Block Diagram",
@@ -117,17 +137,11 @@ export const PATENT_INFO = {
       tag: "Washing System",
       description: "Front view of the rope and track washing tank showcasing pressurized water delivery and sediment filtration.",
       image: "/patent/patent_cleaning_tank.png"
-    },
-    {
-      id: "fig1",
-      title: "Fig. 1: System Operation Flowchart",
-      tag: "Control Logic",
-      description: "Decision logic flow chart: time trigger, dust detection threshold comparison, washing sequence execution, and safety termination.",
-      image: "/patent/patent_flow_diagram.png"
     }
   ]
 };
 
+// Exact GitHub repository links confirmed from user profile
 export const PROJECTS: Project[] = [
   {
     id: "tracex",
@@ -172,7 +186,8 @@ export const PROJECTS: Project[] = [
       "Java Collections Framework & Java Swing GUI"
     ],
     tags: ["Java", "Java Swing", "Nested HashMaps", "PriorityQueue", "LinkedList", "Stack", "DSA"],
-    githubUrl: "https://github.com/Abhyudai-Sood",
+    // Exact repository link confirmed from GitHub API
+    githubUrl: "https://github.com/Abhyudai-Sood/Smart-Blood-Donation-Matching-",
     category: "Systems & DSA",
     accentColor: "#ef4444"
   },
@@ -195,7 +210,8 @@ export const PROJECTS: Project[] = [
       "Telemetry Analytics with Chart.js"
     ],
     tags: ["Python", "Genetic Algorithm", "Linear Regression", "Leaflet.js", "Chart.js", "JavaScript"],
-    githubUrl: "https://github.com/Abhyudai-Sood",
+    // Exact repository link confirmed from GitHub API
+    githubUrl: "https://github.com/Abhyudai-Sood/Opti--Reach",
     category: "AI & Algorithms",
     accentColor: "#06b6d4"
   },
@@ -245,6 +261,7 @@ export const PROJECTS: Project[] = [
   }
 ];
 
+// Renamed and enriched with soft skills in a strictly symmetric 4-category layout
 export const SKILL_CATEGORIES: SkillCategory[] = [
   {
     title: "Programming Languages",
@@ -278,6 +295,45 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { name: "AutoCAD & Arduino", brandColor: "#00979d", proof: "Patent Prototyping & Sensor Control", level: 82 },
       { name: "Adobe Illustrator", brandColor: "#ff9a00", proof: "Visual Assets & UI Design", level: 80 }
     ]
+  },
+  {
+    title: "Professional & Soft Skills",
+    skills: [
+      { name: "Problem Solving", brandColor: "#06b6d4", proof: "Asymptotic Analysis & Algorithmic Logic", level: 95 },
+      { name: "Team Collaboration", brandColor: "#10b981", proof: "Cross-Functional Engineering Projects", level: 92 },
+      { name: "Project Management", brandColor: "#8b5cf6", proof: "Milestone Tracking & Execution", level: 88 },
+      { name: "Technical Communication", brandColor: "#f59e0b", proof: "Documentation, Patent Filing & Reporting", level: 90 },
+      { name: "Adaptability", brandColor: "#ec4899", proof: "Rapid Mastery of New Tech Stacks", level: 92 },
+      { name: "Engineering Leadership", brandColor: "#3b82f6", proof: "Mentorship & Community Welfare", level: 86 }
+    ]
+  }
+];
+
+// Dedicated Summer Trainings & Internships Section
+export const TRAININGS: TrainingItem[] = [
+  {
+    id: "training-logic",
+    title: "Logic Building, Programming & Data Structures",
+    issuer: "Centre for Professional Enhancement, Lovely Professional University",
+    duration: "13 June 2025 – 18 July 2025",
+    grade: "Grade A",
+    credentialId: "Certificate No. 407907",
+    image: "/certificates/lpu_logic_building_cert.jpg",
+    description: "Rigorous skill development course covering C++ fundamentals, algorithmic thinking, recursion, dynamic programming, arrays, and lists. Developed the ACADEX Student Performance Index as capstone project.",
+    skills: ["C++", "STL", "Logic Building", "Recursion", "Dynamic Programming", "Algorithm Optimization"],
+    capstone: "ACADEX – Student Performance Index Suite"
+  },
+  {
+    id: "training-dsa",
+    title: "Data Structures Fundamentals: Basics to Applications",
+    issuer: "Centre for Professional Enhancement, Lovely Professional University",
+    duration: "14 June 2026 – 27 July 2026",
+    grade: "Grade A",
+    credentialId: "Certificate No. 491955",
+    image: "/certificates/lpu_dsa_fundamentals_cert.jpg",
+    description: "In-depth skill development program in Java DSA covering Arrays, LinkedLists, Stacks, Queues, Trees, HashMaps, searching, and sorting. Engineered the Smart Blood Donation Network with Java Swing as capstone.",
+    skills: ["Java", "HashMaps", "PriorityQueue", "LinkedList", "Stack", "Trees", "Searching & Sorting"],
+    capstone: "Smart Blood Donation & Emergency Matching Network"
   }
 ];
 
@@ -344,7 +400,7 @@ export const CERTIFICATES: CertificateItem[] = [
   }
 ];
 
-// Education Section: ONLY location where CGPA and Class XII marks are displayed
+// Education Section: ONLY location where CGPA and Class XII & X marks are displayed
 export const EDUCATION = [
   {
     institution: "Lovely Professional University",
@@ -353,7 +409,7 @@ export const EDUCATION = [
     duration: "Aug 2024 - Jun 2028 (Pursuing)",
     score: "CGPA: 8.06 / 10.0",
     campusImage: "/education/lpu_campus.jpg",
-    logoImage: "/education/lpu_logo.png",
+    logoImage: "/education/lpu_official_header_logo.png",
     badge: "NAAC Grade A++ Accredited",
     tagline: "NIRF Top-Ranked University in Northern India • 600+ Acre Smart Tech Campus",
     highlights: [
@@ -368,35 +424,16 @@ export const EDUCATION = [
     location: "Milsington, Shimla, Himachal Pradesh",
     degree: "Senior Secondary (Class XII CBSE) & Secondary (Class X ICSE)",
     duration: "Graduated 2024",
-    score: "Class XII: 72.0% (PCM) | Class X: 88.6%",
+    score: "Class XII: 72.0% (PCM) | Class X: 85.6%",
     campusImage: "/education/st_edwards_school.jpg",
     logoImage: "/education/st_edwards_crest.png",
     badge: "Est. 1925 • Christian Brothers",
-    tagline: "Historic Heritage Boys' School in Northern India • Motto: 'Lumen Sequere' (Follow the Light)",
+    tagline: "Historic Heritage Boys' Institution in Shimla • Motto: 'Lumen Sequere' (Follow the Light)",
     highlights: [
-      "Established in 1925; premier heritage convent institution renowned for academic discipline and leadership development.",
-      "Prestigious alumni include Former Head of State Hamid Karzai, India's First Chief of Defence Staff (CDS Gen. Bipin Rawat), Maha Vir Chakra war heroes, and Supreme Court jurists.",
-      "Rigorous pre-engineering foundation in advanced mathematics, analytical mechanics, physical sciences, and computer programming.",
-      "Active participant in STEM exhibitions, sports, and school leadership activities."
+      "Established in 1925 by Irish Christian Brothers in Milsington, Shimla; one of the oldest premier heritage convent institutions in North India.",
+      "Renowned for disciplined academic excellence, character development, and illustrious alumni including Former President of Afghanistan Hamid Karzai, India's First Chief of Defence Staff (CDS Gen. Bipin Rawat), Maha Vir Chakra war heroes, and Supreme Court judges.",
+      "Built rigorous academic foundations in analytical mathematics, physics, chemistry, computer applications, and competitive debate.",
+      "Actively represented school in co-curricular activities, leadership forums, and athletic events in Shimla."
     ]
-  }
-];
-
-export const TRAININGS = [
-  {
-    title: "Data Structures Fundamentals: Basics to Applications",
-    issuer: "Lovely Professional University",
-    duration: "Jun 2026 - Jul 2026",
-    certificateImage: "/certificates/dsa_certificate.png",
-    skills: ["Java", "Arrays", "Linked Lists", "Stacks", "Queues", "Trees", "HashMaps", "Searching & Sorting"],
-    description: "Comprehensive training covering Java DSA. Applied HashMaps, PriorityQueues, LinkedLists, and Stacks to practical programming challenges. Engineered the Smart Blood Donation Network with Java Swing as capstone."
-  },
-  {
-    title: "Logic Building, Programming & Data Structures",
-    issuer: "Lovely Professional University",
-    duration: "Jun 2025 - Jul 2025",
-    certificateImage: "/certificates/cpp_certificate.png",
-    skills: ["C++", "STL", "Logic Building", "Recursion", "Dynamic Programming", "Algorithm Optimization"],
-    description: "In-depth study of C++ fundamentals, algorithmic thinking, arrays, linked lists, stacks, hashing, recursion, and dynamic programming. Developed the Acadex Student Performance Index."
   }
 ];
