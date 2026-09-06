@@ -1,0 +1,14 @@
+Page 1: TITLE: AUTOMATIC WINDOW TRACK CLEANER
+Page 1: INTERNAL INVENTOR(S)/ STUDENT(S): All fields in this column are mandatory to
+Page 1: Address of Internal Inventors
+Page 1: Address of Internal Inventors
+Page 2: Address of Internal Inventors
+Page 2: Address of Internal Inventors
+Page 9: Fig. 1: Flow diagram
+Page 10: Fig. 2: Block Diagram
+Page 13: Fig. 3: Simulation Circuit Diagram of the Automatic Sliding Window Track Cleaning System
+Page 13: effortless and hands-free. As shown in the circuit diagram Fig. 3, the system kicks off by setting
+Page 18: Fig. 4: Top View of the Track, Pulley and Sensor Arrangement
+Page 19: Fig. 5 Front View of the Rope Cleaning Tank
+Page 20: Signature of Inventor
+Page 20: Name of Inventor with UID and

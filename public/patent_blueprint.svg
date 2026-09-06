@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" style="background:#0b0f19; font-family:'JetBrains Mono', monospace;">
+  <defs>
+    <linearGradient id="cyanGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.4"/>
+    </linearGradient>
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+
+  <!-- Border Frame -->
+  <rect x="20" y="20" width="760" height="460" fill="none" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="10 5" opacity="0.4" rx="10"/>
+  
+  <!-- Header Stamp -->
+  <text x="40" y="55" fill="#06b6d4" font-size="14" font-weight="bold" letter-spacing="2">INDIAN PATENT APPLICATION SPECIFICATION</text>
+  <text x="40" y="75" fill="#94a3b8" font-size="11">APPLICATION NO: 202511067767 | CLASSIFICATION: AUTOMATED CLEANING &amp; ROBOTICS</text>
+  <text x="610" y="55" fill="#10b981" font-size="12" font-weight="bold">[OFFICIALLY FILED]</text>
+
+  <!-- Track Base -->
+  <rect x="80" y="340" width="640" height="30" fill="#1e293b" stroke="#334155" stroke-width="2" rx="4"/>
+  <line x1="80" y1="355" x2="720" y2="355" stroke="#06b6d4" stroke-width="2" stroke-dasharray="6 4" opacity="0.6"/>
+  <text x="320" y="390" fill="#64748b" font-size="11">FIG 1: SLIDING WINDOW GROOVE CROSS-SECTION</text>
+
+  <!-- Autonomous Cleaning Carriage -->
+  <rect x="250" y="170" width="300" height="160" fill="#0f172a" stroke="#06b6d4" stroke-width="2" rx="12"/>
+  
+  <!-- Chassis Details -->
+  <rect x="270" y="190" width="260" height="80" fill="#1e293b" stroke="#475569" stroke-width="1" rx="6"/>
+  <text x="310" y="225" fill="#38bdf8" font-size="13" font-weight="bold">MICROCONTROLLER UNIT</text>
+  <text x="325" y="245" fill="#94a3b8" font-size="10">ARDUINO / SENSOR LOGIC</text>
+
+  <!-- Drive Wheels -->
+  <circle cx="290" cy="335" r="16" fill="#334155" stroke="#06b6d4" stroke-width="2"/>
+  <circle cx="290" cy="335" r="5" fill="#06b6d4"/>
+  <circle cx="510" cy="335" r="16" fill="#334155" stroke="#06b6d4" stroke-width="2"/>
+  <circle cx="510" cy="335" r="5" fill="#06b6d4"/>
+
+  <!-- Cleaning Sweeper Mechanism -->
+  <rect x="360" y="280" width="80" height="50" fill="#f59e0b" fill-opacity="0.2" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 2" rx="4"/>
+  <text x="368" y="305" fill="#f59e0b" font-size="9" font-weight="bold">MOTORIZED SWEEP</text>
+  <text x="378" y="320" fill="#f59e0b" font-size="8">MECHANISM</text>
+
+  <!-- Obstacle Sensors -->
+  <circle cx="250" cy="230" r="10" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="2"/>
+  <circle cx="550" cy="230" r="10" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="2"/>
+  <path d="M 220 210 Q 235 230 220 250" fill="none" stroke="#ef4444" stroke-width="1.5" opacity="0.7"/>
+  <path d="M 580 210 Q 565 230 580 250" fill="none" stroke="#ef4444" stroke-width="1.5" opacity="0.7"/>
+
+  <!-- Labels -->
+  <text x="80" y="195" fill="#f87171" font-size="10">FRONT PROXIMITY SENSOR ▹</text>
+  <text x="590" y="195" fill="#f87171" font-size="10">◃ REAR PROXIMITY SENSOR</text>
+
+  <!-- Technical Spec Box -->
+  <rect x="50" y="415" width="700" height="50" fill="#0f172a" stroke="#1e293b" rx="6"/>
+  <text x="70" y="437" fill="#94a3b8" font-size="11">TITLE: AUTOMATED SLIDING WINDOW TRACK CLEANING SYSTEM | INVENTOR: ABHYUDAI SOOD</text>
+  <text x="70" y="453" fill="#64748b" font-size="10">SYSTEM: BI-DIRECTIONAL MOTOR DRIVE WITH REAL-TIME OBSTACLE MITIGATION</text>
+</svg>
