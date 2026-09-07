@@ -48,7 +48,7 @@ export const BentoGrid: React.FC = () => {
               <Zap className="w-4 h-4 text-amber-400" />
               <div className="text-left">
                 <span className="text-[10px] text-slate-400 font-mono block">PROBLEM SOLVING</span>
-                <span className="text-sm font-bold font-mono text-amber-300">DSA &bull; LeetCode</span>
+                <span className="text-sm font-bold font-mono text-amber-300">DSA &bull; Algorithms</span>
               </div>
             </div>
 
@@ -65,7 +65,7 @@ export const BentoGrid: React.FC = () => {
         {/* 4-Card Clean Executive Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5">
           
-          {/* Card 1: Full-Stack & Systems Architecture (Enriched & fully detailed!) */}
+          {/* Card 1: Full-Stack & Systems Architecture */}
           <SpotlightCard
             className="lg:col-span-7 h-[360px] p-6 sm:p-7 flex flex-col justify-between border-white/[0.08] bg-[#0c1019]/90"
             spotlightColor="rgba(6, 182, 212, 0.15)"
@@ -131,7 +131,7 @@ export const BentoGrid: React.FC = () => {
             </div>
           </SpotlightCard>
 
-          {/* Card 2: Status Widget (Cleaned up as requested) */}
+          {/* Card 2: Status Widget */}
           <SpotlightCard
             className="lg:col-span-5 h-[360px] p-6 sm:p-7 border-white/[0.08] bg-[#0c1019]/90"
             spotlightColor="rgba(16, 185, 129, 0.15)"
@@ -139,7 +139,7 @@ export const BentoGrid: React.FC = () => {
             <StatusWidget />
           </SpotlightCard>
 
-          {/* Card 3: Algorithmic & AI Engineering Core (Complete & enriched!) */}
+          {/* Card 3: Algorithmic & AI Engineering Core */}
           <SpotlightCard
             className="lg:col-span-7 h-[340px] p-6 sm:p-7 flex flex-col justify-between border-white/[0.08] bg-[#0c1019]/90"
             spotlightColor="rgba(139, 92, 246, 0.15)"
@@ -185,20 +185,18 @@ export const BentoGrid: React.FC = () => {
             </div>
 
             <div className="flex items-center justify-between pt-3 border-t border-white/[0.06] text-xs font-mono">
-              <span className="text-slate-400">Competitive programming &bull; LeetCode practice</span>
+              <span className="text-slate-400">Complexity: Time &amp; Space Optimized</span>
               <a
-                href="https://github.com/Abhyudai-Sood/LeetCode"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#skills"
                 className="text-violet-400 hover:text-violet-300 flex items-center gap-1 font-semibold"
               >
-                <span>github.com/Abhyudai-Sood/LeetCode</span>
+                <span>Explore Technical Skills</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </a>
             </div>
           </SpotlightCard>
 
-          {/* Card 4: Operating System Simulation Core (TraceX Spotlight) */}
+          {/* Card 4: Development Tooling & Workflow Pipeline (Unique Information, No TraceX Redundancy!) */}
           <SpotlightCard
             className="lg:col-span-5 h-[340px] p-6 sm:p-7 flex flex-col justify-between border-white/[0.08] bg-[#0c1019]/90"
             spotlightColor="rgba(6, 182, 212, 0.15)"
@@ -207,41 +205,45 @@ export const BentoGrid: React.FC = () => {
               <div className="flex items-center justify-between border-b border-white/[0.08] pb-3 mb-4">
                 <div className="flex items-center gap-2 text-cyan-400 font-mono text-xs font-bold uppercase tracking-wider">
                   <Cpu className="w-4 h-4" />
-                  <span>Systems &amp; Low-Level Sim</span>
+                  <span>Tooling &amp; Workflow Pipeline</span>
                 </div>
                 <span className="text-[11px] font-mono text-emerald-400 font-bold">
-                  POSIX Kernel
+                  Dev Environment
                 </span>
               </div>
 
               <h4 className="text-base font-bold text-white">
-                TraceX: OS Syscall Simulation
+                Modern Development Standards
               </h4>
               <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                Interactive simulator demonstrating kernel system calls (<code className="text-cyan-300 font-mono">fork</code>, <code className="text-cyan-300 font-mono">exec</code>, <code className="text-cyan-300 font-mono">read</code>, <code className="text-cyan-300 font-mono">write</code>, <code className="text-cyan-300 font-mono">exit</code>), PID management, and memory allocation.
+                Streamlined local development and continuous delivery practices engineered for rapid prototyping, type safety, and clean code hygiene.
               </p>
 
-              <div className="mt-4 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-1">
+              <div className="mt-4 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-2">
                 <div className="flex justify-between text-xs font-mono">
-                  <span className="text-slate-400">Syscall Dispatch</span>
-                  <span className="text-cyan-300">POSIX Standard</span>
+                  <span className="text-slate-400">IDE &amp; Tooling</span>
+                  <span className="text-cyan-300 font-medium">VS Code &bull; Git &bull; Vite</span>
                 </div>
                 <div className="flex justify-between text-xs font-mono">
-                  <span className="text-slate-400">Visualization</span>
-                  <span className="text-emerald-300">Chart.js Analytics</span>
+                  <span className="text-slate-400">CI/CD Pipeline</span>
+                  <span className="text-emerald-300 font-medium">GitHub &bull; Vercel Deploy</span>
+                </div>
+                <div className="flex justify-between text-xs font-mono">
+                  <span className="text-slate-400">Engineering Approach</span>
+                  <span className="text-violet-300 font-medium">Modular &bull; Type-Safe</span>
                 </div>
               </div>
             </div>
 
             <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono">
-              <span className="text-slate-400">Systems programming</span>
+              <span className="text-slate-400">Engineering profile</span>
               <a
-                href="https://github.com/Abhyudai-Sood/TraceX"
+                href={PERSONAL_INFO.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1"
               >
-                <span>View TraceX Repo</span>
+                <span>github.com/Abhyudai-Sood</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </a>
             </div>

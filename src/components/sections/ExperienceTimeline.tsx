@@ -72,32 +72,22 @@ export const ExperienceTimeline: React.FC = () => {
                         edu.tagline
                       )
                     }
-                    className="relative h-52 w-full overflow-hidden bg-black/60 border-b border-white/[0.08] cursor-pointer group"
+                    className="relative h-56 w-full overflow-hidden bg-black/60 border-b border-white/[0.08] cursor-pointer group"
                   >
                     <img
                       src={edu.campusImage}
                       alt={`${edu.institution} Campus`}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0c1019] via-[#0c1019]/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0c1019] via-[#0c1019]/25 to-transparent" />
                     
-                    {/* Official Logo / Emblem Badge (Clear & Prominent) */}
-                    <div className="absolute bottom-3 left-4 flex items-center gap-3">
-                      <div className="h-12 px-3 py-1 rounded-xl bg-white/95 backdrop-blur-md shadow-lg border border-white/20 flex items-center justify-center shrink-0">
-                        <img
-                          src={edu.logoImage}
-                          alt={`${edu.institution} Logo`}
-                          className="h-9 w-auto object-contain"
-                        />
-                      </div>
-                      <div>
-                        <span className="text-xs font-mono px-2.5 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 backdrop-blur-md font-semibold">
-                          {edu.badge}
-                        </span>
-                      </div>
+                    <div className="absolute bottom-3 left-4">
+                      <span className="text-xs font-mono px-3 py-1 rounded-lg bg-black/75 text-cyan-300 border border-cyan-500/30 backdrop-blur-md font-semibold shadow-md">
+                        {edu.badge}
+                      </span>
                     </div>
 
-                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/60 text-slate-300 border border-white/10 text-[10px] font-mono flex items-center gap-1 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/70 text-slate-300 border border-white/10 text-[10px] font-mono flex items-center gap-1 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">
                       <ZoomIn className="w-3 h-3 text-cyan-400" />
                       <span>Enlarge Photo</span>
                     </div>

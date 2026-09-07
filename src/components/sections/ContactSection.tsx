@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { PERSONAL_INFO } from '@/data/portfolioData';
-import { Mail, MapPin, Send, CheckCircle2, Github, Linkedin, Copy } from 'lucide-react';
+import { Mail, MapPin, Send, CheckCircle2, Github, Linkedin, Copy, Paperclip, X, FileText } from 'lucide-react';
 import { SpecularButton } from '@/components/react-bits/SpecularButton';
 
 export const ContactSection: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [formSent, setFormSent] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [attachment, setAttachment] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const copyEmail = () => {
     navigator.clipboard.writeText(PERSONAL_INFO.email);
@@ -14,13 +16,22 @@ export const ContactSection: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setAttachment(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
     
     const subject = encodeURIComponent(`Portfolio Inquiry from ${formData.name}`);
+    const attachmentNote = attachment
+      ? `\n\n[Attached Document: ${attachment.name} (${(attachment.size / 1024).toFixed(1)} KB)]`
+      : '';
     const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}${attachmentNote}`
     );
     window.open(`mailto:${PERSONAL_INFO.email}?subject=${subject}&body=${body}`, '_blank');
     
@@ -28,6 +39,7 @@ export const ContactSection: React.FC = () => {
     setTimeout(() => {
       setFormSent(false);
       setFormData({ name: '', email: '', message: '' });
+      setAttachment(null);
     }, 4000);
   };
 
@@ -148,6 +160,46 @@ export const ContactSection: React.FC = () => {
                       placeholder="Discussing software engineering roles, project architecture, or patent inquiries..."
                       className="w-full px-3.5 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
                     />
+                  </div>
+
+                  {/* Attachment Button & Selected File Display */}
+                  <div className="space-y-2">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      className="hidden"
+                      accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg"
+                    />
+
+                    <div className="flex flex-wrap items-center justify-between gap-2.5">
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] text-xs font-mono text-slate-300 hover:text-cyan-300 transition-colors cursor-pointer"
+                      >
+                        <Paperclip className="w-3.5 h-3.5 text-cyan-400" />
+                        <span>Attach Document (PDF, Image, Doc)</span>
+                      </button>
+
+                      {attachment && (
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-xs font-mono text-cyan-300">
+                          <FileText className="w-3.5 h-3.5" />
+                          <span className="max-w-[160px] truncate">{attachment.name}</span>
+                          <span className="text-[10px] text-slate-400">
+                            ({(attachment.size / 1024).toFixed(1)} KB)
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setAttachment(null)}
+                            className="p-0.5 hover:text-white ml-1 cursor-pointer"
+                            title="Remove attachment"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <SpecularButton

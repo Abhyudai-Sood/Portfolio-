@@ -39,102 +39,256 @@ export const ResumeChatbot: React.FC<ResumeChatbotProps> = ({ onOpenResume }) =>
   const generateResponse = (query: string): Message => {
     const q = query.toLowerCase().trim();
 
-    // 1. Contact / Hiring / Email / Phone
-    if (q.includes('contact') || q.includes('email') || q.includes('phone') || q.includes('reach') || q.includes('hire') || q.includes('call')) {
+    // 1. Greetings & Pleasantries
+    if (
+      q === 'hi' ||
+      q === 'hello' ||
+      q === 'hey' ||
+      q.startsWith('hi ') ||
+      q.startsWith('hello ') ||
+      q.startsWith('hey ') ||
+      q.includes('good morning') ||
+      q.includes('good afternoon') ||
+      q.includes('good evening') ||
+      q.includes('how are you')
+    ) {
       return {
         sender: 'bot',
-        text: `You can reach Abhyudai directly at:\n• Email: ${PERSONAL_INFO.email}\n• Phone: ${PERSONAL_INFO.phone}\n• LinkedIn: ${PERSONAL_INFO.linkedin}\nHe is actively available for Software Engineering and Full-Stack / AI roles!`,
+        text: `Hello! I'm Abhyudai's AI Assistant. I have complete information about his software engineering background, full-stack & AI projects, Indian Patent, LPU coursework, St. Edward's School foundation, verified certificates, and technical skills.\n\nFeel free to ask me anything, such as:\n• "Tell me about your projects"\n• "What is your Indian Patent?"\n• "What are your core technical skills?"\n• "Tell me about your education and college"\n• "What summer trainings have you completed?"`,
       };
     }
 
-    // 2. Resume / CV
-    if (q.includes('resume') || q.includes('cv') || q.includes('download')) {
+    // 2. Identity / About Me / Bio / Overview
+    if (
+      q.includes('who is abhyudai') ||
+      q.includes('who are you') ||
+      q.includes('tell me about yourself') ||
+      q.includes('tell me about abhyudai') ||
+      q.includes('about yourself') ||
+      q.includes('about me') ||
+      q.includes('bio') ||
+      q.includes('intro') ||
+      q.includes('introduction') ||
+      q.includes('background') ||
+      q.includes('overview') ||
+      q.includes('profile')
+    ) {
+      return {
+        sender: 'bot',
+        text: `${PERSONAL_INFO.bio}\n\nKey Highlights:\n• Specialization: Full-Stack Development & Artificial Intelligence\n• Indian Patent Co-Inventor (#202411039860) for an electromechanical window track cleaner\n• Academic Standing: B.Tech CSE at Lovely Professional University (CGPA: 8.06 / 10.0)\n• Schooling: St. Edward's School Shimla (Class X: 85.6%, Class XII: 72.0%)\n• Summer Trainings: Grade A in Logic Building (C++) and DSA Fundamentals (Java)`,
+      };
+    }
+
+    // 3. Roles / Career / Availability
+    if (
+      q.includes('available') ||
+      q.includes('availability') ||
+      q.includes('opportunity') ||
+      q.includes('opportunities') ||
+      q.includes('hire') ||
+      q.includes('hiring') ||
+      q.includes('looking for') ||
+      q.includes('job') ||
+      q.includes('intern') ||
+      q.includes('role') ||
+      q.includes('positions')
+    ) {
+      return {
+        sender: 'bot',
+        text: `Abhyudai is actively available for Software Engineering (SWE), Full-Stack Developer, and AI/ML roles.\n\nCore strengths he brings to teams:\n• Strong foundations in C++, Java, Python, SQL, and modern JavaScript/React\n• Proven ability to design and build end-to-end applications\n• Algorithmic problem solving with time/space complexity optimization\n• Documented patent innovation and CPE summer training distinction (Grade A)`,
+      };
+    }
+
+    // 4. Contact / Coordinates / Reach
+    if (
+      q.includes('contact') ||
+      q.includes('email') ||
+      q.includes('phone') ||
+      q.includes('reach') ||
+      q.includes('call') ||
+      q.includes('linkedin') ||
+      q.includes('connect')
+    ) {
+      return {
+        sender: 'bot',
+        text: `You can reach Abhyudai directly via:\n• Email: ${PERSONAL_INFO.email}\n• Phone: ${PERSONAL_INFO.phone}\n• LinkedIn: ${PERSONAL_INFO.linkedin}\n• GitHub: ${PERSONAL_INFO.github}\n• Base Location: ${PERSONAL_INFO.location}`,
+      };
+    }
+
+    // 5. Resume / CV
+    if (q.includes('resume') || q.includes('cv') || q.includes('download cv') || q.includes('curriculum vitae')) {
       if (onOpenResume) onOpenResume();
       return {
         sender: 'bot',
-        text: `I've opened the CV modal for you! You can also download his official PDF resume using the Download CV button at the top.`,
+        text: `I have opened Abhyudai's official CV modal! You can inspect his credentials and download the PDF using the Download CV button.`,
       };
     }
 
-    // 3. Indian Patent
-    if (q.includes('patent') || q.includes('window') || q.includes('cleaner') || q.includes('invention') || q.includes('hardware') || q.includes('arduino')) {
+    // 6. Indian Patent
+    if (
+      q.includes('patent') ||
+      q.includes('cleaner') ||
+      q.includes('window') ||
+      q.includes('invention') ||
+      q.includes('hardware') ||
+      q.includes('arduino') ||
+      q.includes('202411039860')
+    ) {
       return {
         sender: 'bot',
-        text: `Abhyudai is an official co-inventor of Indian Patent Application #${PATENT_INFO.applicationNo} ("${PATENT_INFO.title}"), filed with the Indian Patent Office on ${PATENT_INFO.filingDate} and published on ${PATENT_INFO.publicationDate}. It features an automated motorized carriage with optical dust sensors, water level safety, and Arduino UNO control for sliding window grooves. You can view the authentic lab photos and sequential diagrams in the Patent section!`,
+        text: `Abhyudai is an official co-inventor of Indian Patent Application #${PATENT_INFO.applicationNo} ("${PATENT_INFO.title}"), filed with the Indian Patent Office (IPO) on ${PATENT_INFO.filingDate} and published on ${PATENT_INFO.publicationDate}.\n\nSystem Details:\n• Engineered with an Arduino UNO microcontroller, RTC module, optical dust sensor, water level sensor, and turbidity monitoring.\n• Features automated bidirectional carriage traversal along sliding window tracks to eliminate manual cleaning labor.\n• You can review authentic university lab fabrication photos and sequential schematic figures (Fig 1 to 5) in the Patent section!`,
       };
     }
 
-    // 4. TraceX (OS simulation)
-    if (q.includes('tracex') || q.includes('os') || q.includes('operating system') || q.includes('syscall') || q.includes('fork')) {
+    // 7. Specific Project: TraceX
+    if (q.includes('tracex') || q.includes('syscall') || q.includes('operating system') || q.includes('os sim')) {
       const p = PROJECTS.find((x) => x.id === 'tracex');
       return {
         sender: 'bot',
-        text: `TraceX is an interactive web-based Operating System simulator built by Abhyudai demonstrating POSIX system calls (fork, exec, read, write, exit), memory allocation, and process lifecycle with Chart.js analytics.\nRepository: ${p?.githubUrl}`,
+        text: `TraceX is an interactive web-based Operating System simulator built by Abhyudai:\n• Simulates core POSIX system calls (fork, exec, read, write, exit), memory allocation, and process lifecycle.\n• Features real-time Chart.js telemetry charts (pie distribution, timelines, bar charts).\n• Repository: ${p?.githubUrl}`,
       };
     }
 
-    // 5. Smart Blood Donation Network
-    if (q.includes('blood') || q.includes('donor') || q.includes('donation') || q.includes('hospital')) {
+    // 8. Specific Project: Smart Blood Donation Network
+    if (q.includes('blood') || q.includes('donor') || q.includes('donation') || q.includes('matching network')) {
       const p = PROJECTS.find((x) => x.id === 'smart-blood-donation');
       return {
         sender: 'bot',
-        text: `The Smart Blood Donation & Emergency Matching Network is a high-performance Java system using Nested HashMaps for O(1) average donor lookup by blood group and city, and a PriorityQueue for emergency triage dispatch.\nRepository: ${p?.githubUrl}`,
+        text: `The Smart Blood Donation & Emergency Matching Network is an enterprise Java system:\n• Implemented Nested HashMaps for O(1) average lookup indexing by blood group and city.\n• PriorityQueue emergency dispatch prioritizing critical patient requests.\n• Built with Java Swing GUI, LinkedLists, and Stacks.\n• Repository: ${p?.githubUrl}`,
       };
     }
 
-    // 6. Opti-Reach
-    if (q.includes('opti') || q.includes('reach') || q.includes('health') || q.includes('camp') || q.includes('genetic') || q.includes('regression')) {
+    // 9. Specific Project: Opti-Reach
+    if (q.includes('opti') || q.includes('reach') || q.includes('health') || q.includes('rural') || q.includes('genetic') || q.includes('regression')) {
       const p = PROJECTS.find((x) => x.id === 'opti-reach');
       return {
         sender: 'bot',
-        text: `Opti-Reach is an AI-driven rural healthcare optimization suite using Linear Regression for village distress priority scoring and a Genetic Algorithm for doctor-slot allocation and conflict reduction.\nRepository: ${p?.githubUrl}`,
+        text: `Opti-Reach is an AI-driven rural healthcare optimization platform:\n• Uses Linear Regression for village healthcare distress scoring.\n• Applies a Genetic Algorithm for doctor–village–slot allocation and route conflict reduction.\n• Interactive geospatial visualization with Leaflet.js and Chart.js analytics.\n• Repository: ${p?.githubUrl}`,
       };
     }
 
-    // 7. ACADEX or WHTS
-    if (q.includes('acadex') || q.includes('spi') || q.includes('calculator') || q.includes('whts') || q.includes('stray') || q.includes('ngo')) {
+    // 10. Specific Project: ACADEX
+    if (q.includes('acadex') || q.includes('spi') || q.includes('calculator') || q.includes('gpa calculator')) {
+      const p = PROJECTS.find((x) => x.id === 'acadex');
       return {
         sender: 'bot',
-        text: `• ACADEX: Student Performance Index suite calculating SPI, CGPA, and backlogs (Repo: https://github.com/Abhyudai-Sood/SPI_Calculator)\n• WHTS: NGO portal for animal welfare with donation and membership pipelines (Repo: https://github.com/Abhyudai-Sood/We-Help-The-Strays).`,
+        text: `ACADEX is a student performance index platform:\n• Calculates SPI, CGPA, backlogs, and percentage with credit-weighted academic algorithms.\n• Built with clean semantic HTML5, responsive CSS3, and mobile-friendly layouts.\n• Developed as the capstone project during LPU Logic Building summer training.\n• Repository: ${p?.githubUrl}`,
       };
     }
 
-    // 8. General Projects
-    if (q.includes('project') || q.includes('work') || q.includes('built') || q.includes('github') || q.includes('portfolio')) {
+    // 11. Specific Project: WHTS
+    if (q.includes('whts') || q.includes('stray') || q.includes('animal') || q.includes('ngo')) {
+      const p = PROJECTS.find((x) => x.id === 'whts');
       return {
         sender: 'bot',
-        text: `Abhyudai has built 5+ major projects:\n1. TraceX (OS Syscall Simulator)\n2. Smart Blood Donation Network (Java DSA O(1))\n3. Opti-Reach (AI Route & Schedule Optimization)\n4. ACADEX (Academic Telemetry)\n5. WHTS (Animal Welfare NGO Portal)\nEvery project tile in the Projects section has a direct GitHub repository link!`,
+        text: `WHTS (We Help The Strays) is a multi-page non-profit organization portal:\n• Integrated donation pipelines, membership onboarding forms, and media galleries.\n• Custom CSS architecture for consistent responsive presentation.\n• Repository: ${p?.githubUrl}`,
       };
     }
 
-    // 9. Education & School
-    if (q.includes('education') || q.includes('college') || q.includes('university') || q.includes('lpu') || q.includes('cgpa') || q.includes('school') || q.includes('edward') || q.includes('marks')) {
+    // 12. General Projects Overview
+    if (q.includes('project') || q.includes('projects') || q.includes('work') || q.includes('built') || q.includes('github')) {
       return {
         sender: 'bot',
-        text: `• College: Lovely Professional University (Punjab) — B.Tech Computer Science & Engineering (2024–2028), CGPA: 8.06 / 10.0 (NAAC A++).\n• School: St. Edward's School, Shimla (Est. 1925 by Christian Brothers) — Class XII: 72.0%, Class X: 85.6%. Renowned heritage institution with notable alumni like CDS Gen. Bipin Rawat.`,
+        text: `Abhyudai has built 5+ major projects spanning systems, AI, and web engineering:\n1. TraceX – OS System Call Simulator (JavaScript, Chart.js)\n2. Smart Blood Donation Network – O(1) Java Matching Engine (Java Collections, Swing)\n3. Opti-Reach – AI Healthcare Route & Schedule Optimizer (Python, Genetic Algorithms)\n4. ACADEX – SPI/CGPA Academic Telemetry Suite (HTML5, CSS3, JS)\n5. WHTS – Animal Welfare NGO Platform (HTML5, CSS3)\n\nEvery project tile in the Projects section has a direct GitHub link!`,
       };
     }
 
-    // 10. Summer Trainings
-    if (q.includes('training') || q.includes('internship') || q.includes('summer') || q.includes('merit')) {
+    // 13. Education & Schooling
+    if (
+      q.includes('education') ||
+      q.includes('college') ||
+      q.includes('university') ||
+      q.includes('lpu') ||
+      q.includes('school') ||
+      q.includes('edward') ||
+      q.includes('cgpa') ||
+      q.includes('marks') ||
+      q.includes('score') ||
+      q.includes('10th') ||
+      q.includes('12th') ||
+      q.includes('grade') ||
+      q.includes('academic')
+    ) {
       return {
         sender: 'bot',
-        text: `Abhyudai completed two verified Summer Trainings at LPU Centre for Professional Enhancement (both with Grade A):\n1. Logic Building, Programming & Data Structures (C++, STL, Recursion, DP)\n2. Data Structures Fundamentals: Basics to Applications (Java, HashMaps, PriorityQueues, Trees). You can inspect the official certificates in the Education section!`,
+        text: `Abhyudai's verified academic track:\n\n1. Higher Education: Lovely Professional University (Punjab)\n• Degree: B.Tech Computer Science and Engineering (2024–2028)\n• Score: CGPA 8.06 / 10.0 (NAAC A++ Accredited University)\n• Co-Inventor of Indian Patent #202411039860 in university innovation labs\n\n2. Schooling: St. Edward's School, Shimla (Himachal Pradesh)\n• Class X (ICSE): 85.6%\n• Class XII (CBSE PCM): 72.0%\n• Historic heritage boys' convent founded in 1925 by Irish Christian Brothers with notable alumni including CDS Gen. Bipin Rawat and former Afghan President Hamid Karzai.`,
       };
     }
 
-    // 11. Skills & Tech Stack
-    if (q.includes('skill') || q.includes('language') || q.includes('java') || q.includes('python') || q.includes('c++') || q.includes('sql') || q.includes('react') || q.includes('dsa')) {
+    // 14. Summer Trainings & Internships
+    if (
+      q.includes('training') ||
+      q.includes('trainings') ||
+      q.includes('internship') ||
+      q.includes('internships') ||
+      q.includes('summer') ||
+      q.includes('cpe') ||
+      q.includes('logic building') ||
+      q.includes('dsa fundamentals')
+    ) {
       return {
         sender: 'bot',
-        text: `Abhyudai's core technical stack includes:\n• Languages: C++, Java, Python, C, JavaScript, SQL\n• Frameworks/Libraries: Java Collections Framework, C++ STL, Chart.js, Leaflet.js, React, Tailwind CSS\n• Soft Skills: Problem Solving, Team Collaboration, Project Management, Technical Documentation.`,
+        text: `Abhyudai completed two verified Summer Trainings at LPU Centre for Professional Enhancement (both with Grade A):\n\n1. Logic Building, Programming & Data Structures (13 June – 18 July 2025)\n• Covered C++, STL, recursion, dynamic programming, and algorithm optimization.\n• Capstone: ACADEX Student Performance Index Suite.\n\n2. Data Structures Fundamentals: Basics to Applications (14 June – 27 July 2026)\n• Covered Java Collections, HashMaps, PriorityQueue, LinkedList, Stack, and Trees.\n• Capstone: Smart Blood Donation & Emergency Matching Network.\n\nYou can inspect both official certificates with verification numbers in the Education section!`,
       };
     }
 
-    // 12. Fallback: Bot does NOT invent answers. Instead, it provides a direct email link to Abhyudai!
+    // 15. Verified Certificates & Credentials
+    if (
+      q.includes('certificate') ||
+      q.includes('certificates') ||
+      q.includes('certification') ||
+      q.includes('certifications') ||
+      q.includes('credential') ||
+      q.includes('infosys') ||
+      q.includes('dbms') ||
+      q.includes('neocolab')
+    ) {
+      return {
+        sender: 'bot',
+        text: `Abhyudai holds 7 verified technical certifications:\n1. Database Management System Part - 1 (Infosys Springboard, Aug 2026)\n2. Programming Using C++ (Infosys Springboard, Aug 2025)\n3. Data Structures & Algorithms CSE205 (NeoColab & LPU, Jul 2026)\n4. Core Java Programming (LPU Capstone, Jun 2026)\n5. AI & Machine Learning Foundations (LPU MOOC Series, Mar 2025)\n6. Advanced Python for Problem Solving (Professional Learning Series, Feb 2025)\n7. Adobe Illustrator UI/Visual Design (Nov 2021)\n\nAll certificates are inspectable via the lightbox in the Education & Credentials section.`,
+      };
+    }
+
+    // 16. Technical & Soft Skills
+    if (
+      q.includes('skill') ||
+      q.includes('skills') ||
+      q.includes('language') ||
+      q.includes('languages') ||
+      q.includes('stack') ||
+      q.includes('c++') ||
+      q.includes('java') ||
+      q.includes('python') ||
+      q.includes('sql') ||
+      q.includes('react') ||
+      q.includes('tools') ||
+      q.includes('soft skill')
+    ) {
+      return {
+        sender: 'bot',
+        text: `Abhyudai's skills with practical application contexts:\n\n• Programming Languages: C++, Java, Python, C, JavaScript, SQL\n• Libraries & Frameworks: Java Collections Framework, C++ STL, Chart.js, Leaflet.js, NumPy, Pandas, React\n• Web & Tools: HTML5, CSS3, Tailwind CSS, VS Code, Git & GitHub, AutoCAD, Arduino\n• Professional Soft Skills: Algorithmic Problem Solving, Cross-Functional Team Collaboration, Technical Documentation, Project Management, and Rapid Adaptability.`,
+      };
+    }
+
+    // 17. Location / Base
+    if (
+      q.includes('location') ||
+      q.includes('where do you live') ||
+      q.includes('where is he') ||
+      q.includes('shimla') ||
+      q.includes('punjab') ||
+      q.includes('himachal')
+    ) {
+      return {
+        sender: 'bot',
+        text: `Abhyudai is based between Shimla, Himachal Pradesh (hometown) and Punjab, India (Lovely Professional University campus). He operates on India Standard Time (IST, UTC+5:30).`,
+      };
+    }
+
+    // 18. Fallback: ONLY when query is genuinely unknown or outside knowledge base
     return {
       sender: 'bot',
-      text: `I don't have that specific detail in Abhyudai's official portfolio knowledge base. However, you can send this inquiry directly to Abhyudai's email so he can respond to you personally!`,
+      text: `I don't have that specific detail in Abhyudai's official portfolio knowledge base. You can send this query directly to Abhyudai's personal email:`,
       isFallback: true,
       unansweredQuery: query,
     };

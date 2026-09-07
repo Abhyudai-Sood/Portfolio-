@@ -41,43 +41,33 @@ export const SkillsMatrix: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {category.skills.map((skill, sIdx) => (
-                    <div key={sIdx} className="space-y-1.5">
-                      <div className="flex items-center justify-between text-xs">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className="w-2 h-2 rounded-full shrink-0"
-                            style={{ backgroundColor: skill.brandColor }}
-                          />
-                          <span className="font-semibold text-slate-100">
-                            {skill.name}
-                          </span>
-                        </div>
-                        <span className="font-mono text-[11px] text-slate-400">
-                          {skill.proof}
+                    <div
+                      key={sIdx}
+                      className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-cyan-500/30 transition-all flex flex-col justify-between space-y-1.5 group"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="w-2 h-2 rounded-full shrink-0"
+                          style={{ backgroundColor: skill.brandColor }}
+                        />
+                        <span className="font-bold text-xs text-white group-hover:text-cyan-300 transition-colors">
+                          {skill.name}
                         </span>
                       </div>
-
-                      {/* Progress bar */}
-                      <div className="w-full h-1.5 rounded-full bg-white/[0.05] overflow-hidden">
-                        <div
-                          className="h-full rounded-full transition-all duration-500"
-                          style={{
-                            width: `${skill.level}%`,
-                            backgroundColor: skill.brandColor,
-                          }}
-                        />
-                      </div>
+                      <p className="text-[11px] text-slate-400 leading-relaxed font-mono">
+                        {skill.proof}
+                      </p>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div className="pt-4 mt-4 border-t border-white/[0.06] flex items-center justify-between text-[11px] font-mono text-slate-400">
-                <span className="flex items-center gap-1 text-emerald-400">
-                  <CheckCircle2 className="w-3 h-3" />
-                  Verified through practical capstones
+                <span className="flex items-center gap-1.5 text-emerald-400">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  Applied across projects &amp; verified coursework
                 </span>
               </div>
             </SpotlightCard>

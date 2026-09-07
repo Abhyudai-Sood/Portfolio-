@@ -186,21 +186,21 @@ export const Hero: React.FC = () => {
                 <div className="pl-4"><span className="text-cyan-400">languages</span> = [</div>
                 <div className="pl-8 text-cyan-300">"C++", "Java", "Python", "JavaScript", "SQL"</div>
                 <div className="pl-4">];</div>
-                <div className="pl-4"><span className="text-cyan-400">frameworks_and_tools</span> = [</div>
-                <div className="pl-8 text-emerald-300">"Java Collections", "C++ STL", "Chart.js", "Leaflet.js", "React"</div>
+                <div className="pl-4"><span className="text-cyan-400">web_and_tools</span> = [</div>
+                <div className="pl-8 text-emerald-300">"HTML5", "CSS3", "React", "Git", "VS Code"</div>
                 <div className="pl-4">];</div>
                 <div>&#125;;</div>
               </pre>
 
-              {/* Live Technical Metric Cards */}
+              {/* Status & Focus Badges */}
               <div className="mt-5 pt-4 border-t border-white/[0.08] grid grid-cols-2 gap-2.5">
                 <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-                  <span className="text-[10px] text-slate-400 font-mono block">Lookup Complexity</span>
-                  <span className="text-sm font-bold font-mono text-cyan-400">O(1) Nested Hash</span>
+                  <span className="text-[10px] text-slate-400 font-mono block">Primary Focus</span>
+                  <span className="text-sm font-bold font-mono text-cyan-400">Full-Stack &amp; AI</span>
                 </div>
                 <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-                  <span className="text-[10px] text-slate-400 font-mono block">Optimization</span>
-                  <span className="text-xs font-bold text-emerald-300 truncate block mt-0.5">Genetic Algorithm</span>
+                  <span className="text-[10px] text-slate-400 font-mono block">Current Status</span>
+                  <span className="text-xs font-bold text-emerald-300 truncate block mt-0.5">Open to Opportunities</span>
                 </div>
               </div>
 

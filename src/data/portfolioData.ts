@@ -339,6 +339,16 @@ export const TRAININGS: TrainingItem[] = [
 
 export const CERTIFICATES: CertificateItem[] = [
   {
+    id: "infosys-dbms",
+    title: "Database Management System Part - 1",
+    issuer: "Infosys Springboard",
+    date: "Aug 2026",
+    credentialId: "verify.onwingspan.com",
+    image: "/certificates/infosys_dbms_cert.jpg",
+    description: "Foundational Database Management Systems course covering relational model concepts, ER diagrams, functional dependencies, normalization (1NF, 2NF, 3NF, BCNF), and structured SQL queries.",
+    skills: ["SQL", "DBMS", "Normalization", "Relational Design"]
+  },
+  {
     id: "cpp-cert",
     title: "Programming Using C++",
     issuer: "Infosys Springboard / Wingspan",
@@ -416,7 +426,7 @@ export const EDUCATION = [
       "Rigorous coursework in Data Structures & Algorithms, Object-Oriented Programming (Java & C++), Operating Systems, and DBMS.",
       "Co-Inventor of Indian Patent Application #202411039860 ('Automatic Window Track Cleaner') engineered in university innovation labs.",
       "Specializing in Artificial Intelligence & Machine Learning with practical applications in predictive modeling and route optimization.",
-      "Active algorithmic problem-solver on LeetCode with strong focus on time & space complexity optimization."
+      "Dedicated algorithmic problem solver with strong focus on time and space complexity optimization across core data structures."
     ]
   },
   {
