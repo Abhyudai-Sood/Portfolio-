@@ -208,7 +208,7 @@ export const BentoGrid: React.FC = () => {
                   <span>Tooling &amp; Workflow Pipeline</span>
                 </div>
                 <span className="text-[11px] font-mono text-emerald-400 font-bold">
-                  Dev Environment
+                  VS Code &bull; Git &bull; JIRA
                 </span>
               </div>
 
@@ -216,21 +216,21 @@ export const BentoGrid: React.FC = () => {
                 Modern Development Standards
               </h4>
               <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                Streamlined local development and continuous delivery practices engineered for rapid prototyping, type safety, and clean code hygiene.
+                Streamlined development workflows, agile sprint tracking with JIRA, and automated continuous delivery pipelines engineered for type safety and clean code hygiene.
               </p>
 
               <div className="mt-4 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-2">
                 <div className="flex justify-between text-xs font-mono">
                   <span className="text-slate-400">IDE &amp; Tooling</span>
-                  <span className="text-cyan-300 font-medium">VS Code &bull; Git &bull; Vite</span>
+                  <span className="text-cyan-300 font-medium">VS Code &bull; Git &bull; JIRA</span>
                 </div>
                 <div className="flex justify-between text-xs font-mono">
-                  <span className="text-slate-400">CI/CD Pipeline</span>
-                  <span className="text-emerald-300 font-medium">GitHub &bull; Vercel Deploy</span>
+                  <span className="text-slate-400">Agile Management</span>
+                  <span className="text-emerald-300 font-medium">JIRA &bull; Sprint Planning</span>
                 </div>
                 <div className="flex justify-between text-xs font-mono">
-                  <span className="text-slate-400">Engineering Approach</span>
-                  <span className="text-violet-300 font-medium">Modular &bull; Type-Safe</span>
+                  <span className="text-slate-400">CI/CD &amp; Versioning</span>
+                  <span className="text-violet-300 font-medium">GitHub &bull; Vercel Deploy</span>
                 </div>
               </div>
             </div>

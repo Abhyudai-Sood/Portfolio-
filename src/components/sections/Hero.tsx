@@ -187,7 +187,7 @@ export const Hero: React.FC = () => {
                 <div className="pl-8 text-cyan-300">"C++", "Java", "Python", "JavaScript", "SQL"</div>
                 <div className="pl-4">];</div>
                 <div className="pl-4"><span className="text-cyan-400">web_and_tools</span> = [</div>
-                <div className="pl-8 text-emerald-300">"HTML5", "CSS3", "React", "Git", "VS Code"</div>
+                <div className="pl-8 text-emerald-300">"C++", "Java", "Python", "Front End", "GitHub", "Arduino IDE", "JIRA"</div>
                 <div className="pl-4">];</div>
                 <div>&#125;;</div>
               </pre>

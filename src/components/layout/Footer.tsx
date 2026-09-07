@@ -1,6 +1,6 @@
 import React from 'react';
 import { PERSONAL_INFO } from '@/data/portfolioData';
-import { Github, Linkedin, Mail, Phone, Heart, ArrowUp } from 'lucide-react';
+import { Github, Linkedin, Mail, Heart, ArrowUp } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const scrollToTop = () => {
@@ -66,13 +66,6 @@ export const Footer: React.FC = () => {
               title="Email"
             >
               <Mail className="w-4 h-4" />
-            </a>
-            <a
-              href={`tel:${PERSONAL_INFO.phone}`}
-              className="p-2.5 rounded-xl bg-white/[0.03] text-slate-400 hover:text-emerald-400 hover:bg-white/[0.08] border border-white/[0.06] transition-all"
-              title="Phone"
-            >
-              <Phone className="w-4 h-4" />
             </a>
 
             {/* Back to top button */}

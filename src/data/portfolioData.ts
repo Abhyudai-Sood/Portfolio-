@@ -60,7 +60,6 @@ export const PERSONAL_INFO = {
   location: "Shimla, HP & Punjab, India",
   timezone: "Asia/Kolkata (IST)",
   email: "abhyudai.edwards@gmail.com",
-  phone: "+91-8894271085",
   github: "https://github.com/Abhyudai-Sood",
   githubUser: "Abhyudai-Sood",
   linkedin: "https://www.linkedin.com/in/abhyudai-sood/",
@@ -289,11 +288,11 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
     title: "Web Technologies & Tools",
     skills: [
       { name: "HTML5 & CSS3", brandColor: "#e34f26", proof: "Semantic Layouts, Responsive Grids", level: 95 },
-      { name: "Leaflet.js", brandColor: "#199900", proof: "Geospatial Health-Camp Mapping", level: 82 },
-      { name: "VS Code", brandColor: "#007acc", proof: "Primary IDE & Extensions Workflow", level: 95 },
       { name: "Git & GitHub", brandColor: "#f05032", proof: "Version Control & Branch Workflows", level: 90 },
-      { name: "AutoCAD & Arduino", brandColor: "#00979d", proof: "Patent Prototyping & Sensor Control", level: 82 },
-      { name: "Adobe Illustrator", brandColor: "#ff9a00", proof: "Visual Assets & UI Design", level: 80 }
+      { name: "JIRA", brandColor: "#0052cc", proof: "Agile Task Tracking & Sprint Planning", level: 90 },
+      { name: "VS Code", brandColor: "#007acc", proof: "Primary IDE & Extensions Workflow", level: 95 },
+      { name: "Leaflet.js", brandColor: "#199900", proof: "Geospatial Health-Camp Mapping", level: 82 },
+      { name: "AutoCAD & Arduino", brandColor: "#00979d", proof: "Patent Prototyping & Sensor Control", level: 82 }
     ]
   },
   {
@@ -304,7 +303,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { name: "Project Management", brandColor: "#8b5cf6", proof: "Milestone Tracking & Execution", level: 88 },
       { name: "Technical Communication", brandColor: "#f59e0b", proof: "Documentation, Patent Filing & Reporting", level: 90 },
       { name: "Adaptability", brandColor: "#ec4899", proof: "Rapid Mastery of New Tech Stacks", level: 92 },
-      { name: "Engineering Leadership", brandColor: "#3b82f6", proof: "Mentorship & Community Welfare", level: 86 }
+      { name: "Engineering Leadership", brandColor: "#3b82f6", proof: "Lead and Managed Project Teams", level: 86 }
     ]
   }
 ];
