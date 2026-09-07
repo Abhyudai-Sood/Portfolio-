@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { AmbientBackground } from '@/components/react-bits/AmbientBackground';
 import { Navbar } from '@/components/layout/Navbar';
 import { Hero } from '@/components/sections/Hero';
@@ -13,15 +14,20 @@ import { Footer } from '@/components/layout/Footer';
 import { ResumeModal } from '@/components/modals/ResumeModal';
 import { ResumeChatbot } from '@/components/chatbot/ResumeChatbot';
 
-export const App: React.FC = () => {
+const PortfolioContent: React.FC = () => {
   const [resumeOpen, setResumeOpen] = useState(false);
+  const { theme } = useTheme();
 
   return (
-    <div className="min-h-screen bg-[#080a0f] text-slate-100 relative selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div
+      className={`min-h-screen ${
+        theme === 'light' ? 'bg-[#f8fafc] text-slate-900' : 'bg-[#080a0f] text-slate-100'
+      } relative selection:bg-cyan-500/30 selection:text-cyan-200 transition-colors duration-300`}
+    >
       {/* Background Ambient Filaments Canvas */}
       <AmbientBackground />
 
-      {/* Top Navbar with Profile Photo & Download CV */}
+      {/* Top Navbar with Profile Photo, Download CV & Theme Toggle */}
       <Navbar onOpenResume={() => setResumeOpen(true)} />
 
       {/* Main Flow */}
@@ -64,6 +70,14 @@ export const App: React.FC = () => {
         isResumeOpen={resumeOpen}
       />
     </div>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <ThemeProvider>
+      <PortfolioContent />
+    </ThemeProvider>
   );
 };
 

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { PERSONAL_INFO } from '@/data/portfolioData';
 import { SpecularButton } from '@/components/react-bits/SpecularButton';
 import { Magnet } from '@/components/react-bits/Magnet';
-import { FileText, Github, Linkedin, Menu, X, ArrowUpRight } from 'lucide-react';
+import { useTheme } from '@/context/ThemeContext';
+import { FileText, Github, Linkedin, Menu, X, ArrowUpRight, Sun, Moon } from 'lucide-react';
 
 interface NavbarProps {
   onOpenResume: () => void;
@@ -11,6 +12,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,8 +76,24 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
           ))}
         </nav>
 
-        {/* Top Actions: Download CV Button + Socials */}
-        <div className="hidden sm:flex items-center gap-2.5">
+        {/* Top Actions: Theme Toggle + Socials + Download CV Button */}
+        <div className="hidden sm:flex items-center gap-2">
+          {/* Theme Toggle Button (Dark / Light) */}
+          <Magnet magnetStrength={2}>
+            <button
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to Light theme' : 'Switch to Dark theme'}
+              title={theme === 'dark' ? 'Switch to Light mode' : 'Switch to Dark mode'}
+              className="p-2 rounded-xl text-slate-400 hover:text-amber-400 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all flex items-center justify-center cursor-pointer group"
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4 text-amber-400 group-hover:rotate-45 transition-transform duration-300" />
+              ) : (
+                <Moon className="w-4 h-4 text-cyan-600 group-hover:-rotate-12 transition-transform duration-300" />
+              )}
+            </button>
+          </Magnet>
+
           <Magnet magnetStrength={3}>
             <a
               href={PERSONAL_INFO.github}
@@ -116,6 +134,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
 
         {/* Mobile Controls */}
         <div className="flex lg:hidden items-center gap-2">
+          {/* Mobile Theme Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            title={theme === 'dark' ? 'Switch to Light mode' : 'Switch to Dark mode'}
+            className="p-2 rounded-lg bg-white/[0.05] text-slate-300 border border-white/[0.08] cursor-pointer"
+          >
+            {theme === 'dark' ? (
+              <Sun className="w-4 h-4 text-amber-400" />
+            ) : (
+              <Moon className="w-4 h-4 text-cyan-600" />
+            )}
+          </button>
+
           <SpecularButton
             onClick={onOpenResume}
             size="sm"
@@ -146,23 +178,45 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
               {link.name}
             </a>
           ))}
-          <div className="pt-3 border-t border-white/[0.08] flex items-center gap-4">
-            <a
-              href={PERSONAL_INFO.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-xs text-slate-300 py-1"
+          <div className="pt-3 border-t border-white/[0.08] flex items-center justify-between">
+            <button
+              onClick={() => {
+                toggleTheme();
+                setMobileMenuOpen(false);
+              }}
+              className="flex items-center gap-2 text-xs font-mono text-slate-300 hover:text-cyan-300 py-1 cursor-pointer"
             >
-              <Github className="w-4 h-4" /> GitHub
-            </a>
-            <a
-              href={PERSONAL_INFO.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-xs text-slate-300 py-1"
-            >
-              <Linkedin className="w-4 h-4 text-cyan-400" /> LinkedIn
-            </a>
+              {theme === 'dark' ? (
+                <>
+                  <Sun className="w-4 h-4 text-amber-400" />
+                  <span>Light Theme</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-4 h-4 text-cyan-600" />
+                  <span>Dark Theme</span>
+                </>
+              )}
+            </button>
+
+            <div className="flex items-center gap-3">
+              <a
+                href={PERSONAL_INFO.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white py-1"
+              >
+                <Github className="w-4 h-4" /> GitHub
+              </a>
+              <a
+                href={PERSONAL_INFO.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-cyan-400 py-1"
+              >
+                <Linkedin className="w-4 h-4 text-cyan-400" /> LinkedIn
+              </a>
+            </div>
           </div>
         </div>
       )}

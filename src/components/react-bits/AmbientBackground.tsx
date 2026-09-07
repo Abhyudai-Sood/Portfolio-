@@ -29,6 +29,7 @@ export const AmbientBackground: React.FC = () => {
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
+      const isLight = document.documentElement.classList.contains('light');
 
       // Render subtle breathing aurora blooms
       for (const orb of orbs) {
@@ -39,8 +40,8 @@ export const AmbientBackground: React.FC = () => {
         if (orb.y < -100 || orb.y > height + 100) orb.vy *= -1;
 
         const grad = ctx.createRadialGradient(orb.x, orb.y, 10, orb.x, orb.y, orb.r);
-        grad.addColorStop(0, orb.color);
-        grad.addColorStop(1, 'rgba(8, 10, 15, 0)');
+        grad.addColorStop(0, isLight ? orb.color.replace('0.045', '0.07').replace('0.04', '0.06').replace('0.035', '0.06') : orb.color);
+        grad.addColorStop(1, isLight ? 'rgba(248, 250, 252, 0)' : 'rgba(8, 10, 15, 0)');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, width, height);
       }
