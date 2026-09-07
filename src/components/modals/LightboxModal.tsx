@@ -36,16 +36,20 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-2xl">
+        <div
+          onClick={onClose}
+          className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-2xl cursor-pointer"
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.92 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-4xl bg-[#0c1019] border border-cyan-500/30 rounded-2xl shadow-2xl shadow-cyan-500/20 overflow-hidden flex flex-col max-h-[95vh]"
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-4xl bg-[#0c1019] border border-cyan-500/30 rounded-2xl shadow-2xl shadow-cyan-500/20 overflow-hidden flex flex-col max-h-[95vh] cursor-default"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.08] bg-[#090d14]">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.08] bg-[#090d14] shrink-0">
               <div className="flex items-center gap-3">
                 <span className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                   <Award className="w-4 h-4" />
@@ -74,10 +78,11 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({
                 </a>
                 <button
                   onClick={onClose}
-                  className="p-2 rounded-xl text-slate-400 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] transition-colors cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-300 hover:text-red-100 border border-red-500/30 transition-colors flex items-center gap-1.5 text-xs font-mono font-bold cursor-pointer"
                   title="Close (ESC)"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-4 h-4 text-red-400" />
+                  <span>Close</span>
                 </button>
               </div>
             </div>
@@ -94,9 +99,19 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-3 border-t border-white/[0.08] bg-[#090d14] flex items-center justify-between text-xs text-slate-400 font-mono">
-              <span>{category || 'Verified Engineering Credential'}</span>
-              <span className="text-cyan-400">Click anywhere outside or press ESC to dismiss</span>
+            <div className="px-6 py-3 border-t border-white/[0.08] bg-[#090d14] flex items-center justify-between text-xs text-slate-400 font-mono shrink-0">
+              <div className="flex items-center gap-2">
+                <span>{category || 'Verified Engineering Credential'}</span>
+                <span className="text-slate-600">&bull;</span>
+                <span className="text-cyan-400">Press ESC or click anywhere outside to close</span>
+              </div>
+              <button
+                onClick={onClose}
+                className="px-3 py-1 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-300 hover:text-red-100 border border-red-500/30 font-bold transition-colors cursor-pointer flex items-center gap-1.5"
+              >
+                <X className="w-3.5 h-3.5 text-red-400" />
+                <span>Close</span>
+              </button>
             </div>
           </motion.div>
         </div>

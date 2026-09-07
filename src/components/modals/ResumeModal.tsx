@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { PERSONAL_INFO, PATENT_INFO, PROJECTS, SKILL_CATEGORIES, EDUCATION, TRAININGS } from '@/data/portfolioData';
 import { X, Download, Printer, ExternalLink, CheckCircle2, Award, Sparkles, FileText } from 'lucide-react';
@@ -10,6 +10,22 @@ interface ResumeModalProps {
 }
 
 export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleConfetti = () => {
@@ -27,11 +43,17 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl animate-in fade-in">
-      <div className="relative w-full max-w-4xl bg-[#0b0e17] border border-cyan-500/30 rounded-2xl shadow-2xl shadow-cyan-500/20 max-h-[95vh] flex flex-col overflow-hidden">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl animate-in fade-in cursor-pointer"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-4xl bg-[#0b0e17] border border-cyan-500/30 rounded-2xl shadow-2xl shadow-cyan-500/20 max-h-[95vh] flex flex-col overflow-hidden cursor-default"
+      >
         
         {/* Modal Top Bar */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.08] bg-[#0c1019]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.08] bg-[#0c1019] shrink-0">
           <div className="flex items-center gap-2">
             <span className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400">
               <Sparkles className="w-4 h-4" />
@@ -52,7 +74,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
               href="/Abhyudai_Sood_Resume.pdf"
               download="Abhyudai_Sood_Resume.pdf"
               onClick={handleConfetti}
-              className="px-3.5 py-1.5 text-xs font-semibold rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20 border border-cyan-400/30 flex items-center gap-1.5 hover:shadow-cyan-500/40 transition-all"
+              className="px-3.5 py-1.5 text-xs font-semibold rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20 border border-cyan-400/30 flex items-center gap-1.5 hover:shadow-cyan-500/40 transition-all cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Download PDF</span>
@@ -61,22 +83,25 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
             <button
               onClick={handlePrint}
               title="Print Document"
-              className="p-2 rounded-xl text-slate-400 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] transition-colors"
+              className="p-2 rounded-xl text-slate-400 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] transition-colors cursor-pointer"
             >
               <Printer className="w-4 h-4" />
             </button>
 
+            {/* Highly Prominent Close Button */}
             <button
               onClick={onClose}
-              className="p-2 rounded-xl text-slate-400 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] transition-colors"
+              className="px-3 py-1.5 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-300 hover:text-red-100 border border-red-500/40 transition-all flex items-center gap-1.5 text-xs font-mono font-bold cursor-pointer"
+              title="Close CV Modal (ESC)"
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4 text-red-400" />
+              <span>Close</span>
             </button>
           </div>
         </div>
 
         {/* Printable Resume Sheet */}
-        <div className="p-6 sm:p-10 overflow-y-auto space-y-6 text-slate-200 print:p-0 print:bg-white print:text-black">
+        <div className="p-6 sm:p-10 overflow-y-auto flex-1 space-y-6 text-slate-200 print:p-0 print:bg-white print:text-black">
           {/* Header */}
           <div className="border-b border-white/[0.1] pb-6 print:border-black">
             <h1 className="text-3xl font-extrabold text-white tracking-tight print:text-black">
@@ -170,6 +195,36 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
             </div>
           </div>
 
+        </div>
+
+        {/* Modal Bottom Sticky Footer Bar with Prominent Close and Download */}
+        <div className="px-6 py-3.5 border-t border-white/[0.08] bg-[#0c1019] flex flex-wrap items-center justify-between gap-3 shrink-0">
+          <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
+            <span>Press</span>
+            <kbd className="px-2 py-0.5 rounded bg-white/[0.08] border border-white/[0.15] text-slate-300 text-[10px] font-mono shadow-sm">
+              ESC
+            </kbd>
+            <span>or click anywhere outside to close</span>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-300 hover:text-red-100 text-xs font-mono font-bold border border-red-500/30 transition-all cursor-pointer flex items-center gap-1.5"
+            >
+              <X className="w-4 h-4 text-red-400" />
+              <span>Close CV</span>
+            </button>
+            <a
+              href="/Abhyudai_Sood_Resume.pdf"
+              download="Abhyudai_Sood_Resume.pdf"
+              onClick={handleConfetti}
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-xs font-mono font-bold shadow-lg shadow-cyan-500/20 border border-cyan-400/30 hover:shadow-cyan-500/40 transition-all flex items-center gap-1.5 cursor-pointer"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download PDF</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>

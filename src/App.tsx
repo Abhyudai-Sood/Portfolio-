@@ -58,7 +58,11 @@ export const App: React.FC = () => {
       <ResumeModal isOpen={resumeOpen} onClose={() => setResumeOpen(false)} />
 
       {/* AI Recruiter Assistant */}
-      <ResumeChatbot onOpenResume={() => setResumeOpen(true)} />
+      <ResumeChatbot
+        onOpenResume={() => setResumeOpen(true)}
+        onCloseResume={() => setResumeOpen(false)}
+        isResumeOpen={resumeOpen}
+      />
     </div>
   );
 };

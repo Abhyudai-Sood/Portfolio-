@@ -37,14 +37,14 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-2xl animate-in fade-in cursor-zoom-out"
+      className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-2xl animate-in fade-in cursor-zoom-out"
     >
       <div
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-5xl bg-[#0b0e17] border border-cyan-500/40 rounded-2xl shadow-2xl shadow-cyan-500/20 max-h-[92vh] flex flex-col overflow-hidden cursor-default"
       >
         {/* Top bar */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.08] bg-[#0c1019]/90">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.08] bg-[#0c1019]/90 shrink-0">
           <div>
             <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-cyan-400" />
@@ -68,16 +68,17 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
 
             <button
               onClick={onClose}
-              className="p-2 rounded-xl text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-colors"
+              className="px-3 py-1.5 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-300 hover:text-red-100 border border-red-500/30 transition-colors flex items-center gap-1.5 text-xs font-mono font-bold cursor-pointer"
               title="Close modal (Esc)"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 text-red-400" />
+              <span>Close</span>
             </button>
           </div>
         </div>
 
         {/* High-res Image Display */}
-        <div className="p-4 sm:p-6 overflow-y-auto flex flex-col items-center justify-center bg-[#07090e]">
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1 flex flex-col items-center justify-center bg-[#07090e]">
           <img
             src={imageSrc}
             alt={title}
@@ -89,6 +90,22 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
               {caption}
             </p>
           )}
+        </div>
+
+        {/* Footer Bar */}
+        <div className="px-6 py-3 border-t border-white/[0.08] bg-[#0c1019]/90 flex items-center justify-between text-xs font-mono text-slate-400 shrink-0">
+          <div className="flex items-center gap-2">
+            <span>Press</span>
+            <kbd className="px-2 py-0.5 rounded bg-white/[0.08] border border-white/[0.15] text-slate-300 text-[10px]">ESC</kbd>
+            <span>or click anywhere outside to close</span>
+          </div>
+          <button
+            onClick={onClose}
+            className="px-3.5 py-1 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-300 hover:text-red-100 border border-red-500/30 font-bold transition-colors cursor-pointer flex items-center gap-1.5"
+          >
+            <X className="w-3.5 h-3.5 text-red-400" />
+            <span>Close</span>
+          </button>
         </div>
       </div>
     </div>

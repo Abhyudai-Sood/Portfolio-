@@ -36,14 +36,14 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity"
+            className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity cursor-pointer"
           />
 
           {/* Modal Container */}
@@ -52,7 +52,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.92, opacity: 0, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-3xl rounded-2xl bg-[#0c1019] border border-white/[0.12] shadow-2xl shadow-cyan-500/20 overflow-hidden z-10 my-8"
+            className="relative w-full max-w-3xl rounded-2xl bg-[#0c1019] border border-white/[0.12] shadow-2xl shadow-cyan-500/20 overflow-hidden z-10 my-8 cursor-default"
           >
             {/* Top Accent Gradient Bar */}
             <div
@@ -91,10 +91,12 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               {/* Close Button */}
               <button
                 onClick={onClose}
-                className="p-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-slate-400 hover:text-white transition-colors border border-white/[0.08]"
+                className="px-3 py-1.5 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-300 hover:text-red-100 transition-colors border border-red-500/30 flex items-center gap-1.5 text-xs font-mono font-bold cursor-pointer"
                 aria-label="Close modal"
+                title="Close modal (ESC)"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4 text-red-400" />
+                <span>Close</span>
               </button>
             </div>
 
@@ -170,9 +172,10 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               <div className="flex items-center gap-3">
                 <button
                   onClick={onClose}
-                  className="px-4 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 text-xs font-mono font-medium transition-all"
+                  className="px-4 py-2 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-300 hover:text-red-100 text-xs font-mono font-bold transition-all border border-red-500/30 flex items-center gap-1.5 cursor-pointer"
                 >
-                  Close
+                  <X className="w-4 h-4 text-red-400" />
+                  <span>Close</span>
                 </button>
 
                 <a

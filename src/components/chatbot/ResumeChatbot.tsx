@@ -12,9 +12,15 @@ interface Message {
 
 interface ResumeChatbotProps {
   onOpenResume?: () => void;
+  onCloseResume?: () => void;
+  isResumeOpen?: boolean;
 }
 
-export const ResumeChatbot: React.FC<ResumeChatbotProps> = ({ onOpenResume }) => {
+export const ResumeChatbot: React.FC<ResumeChatbotProps> = ({
+  onOpenResume,
+  onCloseResume,
+  isResumeOpen,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [visitorName, setVisitorName] = useState<string>(() => {
@@ -460,8 +466,32 @@ export const ResumeChatbot: React.FC<ResumeChatbotProps> = ({ onOpenResume }) =>
       if (onOpenResume) onOpenResume();
       return {
         sender: 'bot',
-        text: `I have opened Abhyudai's official CV modal for you! You can inspect his full credentials and click the Download CV button to get the PDF copy.`,
-        chips: ['Featured Projects', 'Technical Skills & JIRA', 'Contact Coordinates'],
+        text: `I have opened Abhyudai's official CV modal for you! You can inspect his full credentials and click the Download PDF button inside the modal to save a copy. You can close it anytime by pressing ESC, clicking outside, or clicking Close.`,
+        chips: ['Close CV Modal', 'Featured Projects', 'Technical Skills & JIRA', 'Contact Coordinates'],
+      };
+    }
+
+    // 15b. Close CV Modal Intent
+    if (
+      matchesAny(q, [
+        'close cv',
+        'close resume',
+        'close modal',
+        'close document',
+        'exit cv',
+        'exit resume',
+        'exit modal',
+        'hide cv',
+        'hide resume',
+        'dismiss cv',
+        'dismiss modal',
+      ])
+    ) {
+      if (onCloseResume) onCloseResume();
+      return {
+        sender: 'bot',
+        text: `I've closed the CV modal for you. What else would you like to explore?`,
+        chips: ['Featured Projects', 'Indian Patent details', 'Tech Stack & JIRA', 'Education & CGPA'],
       };
     }
 
@@ -602,6 +632,23 @@ export const ResumeChatbot: React.FC<ResumeChatbotProps> = ({ onOpenResume }) =>
               <X className="w-4 h-4" />
             </button>
           </div>
+
+          {/* Active CV Modal Alert Banner */}
+          {isResumeOpen && (
+            <div className="px-3.5 py-2 bg-cyan-500/10 border-b border-cyan-500/20 flex items-center justify-between gap-2 text-[11px] font-mono">
+              <span className="text-cyan-300 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+                <span>CV Modal is currently open</span>
+              </span>
+              <button
+                onClick={() => onCloseResume?.()}
+                className="px-2.5 py-1 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-300 hover:text-red-100 border border-red-500/30 text-[10px] font-bold cursor-pointer transition-colors flex items-center gap-1"
+              >
+                <X className="w-3 h-3 text-red-400" />
+                <span>Close CV</span>
+              </button>
+            </div>
+          )}
 
           {/* Messages Feed */}
           <div className="p-4 space-y-3.5 h-88 overflow-y-auto text-xs">
